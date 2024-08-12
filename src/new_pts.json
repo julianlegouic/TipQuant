@@ -1,0 +1,127 @@
+{
+    "CONFIGS": [
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/new_PTs/disapearring_PT/Movie_S3_turning_PT_(green).tif",
+            "OUTPUT_DIR": "data/videos/output/new_pts",
+            "TIMESTEP": 7.5,
+            "PIXEL_SIZE": 0.077,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": true
+            },
+            "TIP": {
+                "STEP": 10,
+                "WINDOW_SIZE": 20,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 13,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 13,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/new_PTs/lif_035_line04_002_ch00/lif_035_line04_002_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/new_pts",
+            "TIMESTEP": 0.8,
+            "PIXEL_SIZE": 0.079,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.7,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 30,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 20,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 20,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/new_PTs/20180509_018_excellent/034_7.lif_034_7_018_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/new_pts",
+            "TIMESTEP": 0.5,
+            "PIXEL_SIZE": 0.112,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.7,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 40,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 15,
+                "THICKNESS": 6
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 15,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,209 @@
+{
+    "CONFIGS": [
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/problematic-pts/1/035_004_good_.avi",
+            "OUTPUT_DIR": "data/videos/output/problematic_PTs",
+            "TIMESTEP": 0.51,
+            "PIXEL_SIZE": 0.10,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.8,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 30,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/problematic-pts/2/034_7_004_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/problematic_PTs",
+            "TIMESTEP": 0.51,
+            "PIXEL_SIZE": 0.10,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 2,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 45,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/problematic-pts/3/20180313_34_9_009_ch00_fast_to_slow.avi",
+            "OUTPUT_DIR": "data/videos/output/problematic_PTs",
+            "TIMESTEP": 0.51,
+            "PIXEL_SIZE": 0.10,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 50,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 6
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/problematic-pts/4/034_7.lif_034_7_002_ch00slowPT.avi",
+            "OUTPUT_DIR": "data/videos/output/problematic_PTs",
+            "TIMESTEP": 0.51,
+            "PIXEL_SIZE": 0.10,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.7,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 50,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 8
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/problematic-pts/5/CRIB_raba_and_103.lif_CRIB_raba_008_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/problematic_PTs",
+            "TIMESTEP": 0.8,
+            "PIXEL_SIZE": 0.12,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 50,
+                "WINDOW_SIZE": 40,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 30,
+                "THICKNESS": 6
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 30,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 4.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        }
+    ]
+}

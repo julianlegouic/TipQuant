@@ -1,0 +1,13 @@
+pandas
+scikit-image
+scipy
+shapely
+numpy>=1.14
+opencv-python>=3.3.0
+streamlit
+toml
+scikit-video
+plotly
+kaleido
+scikit-learn
+tqdm

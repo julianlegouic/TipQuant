@@ -1,0 +1,291 @@
+{
+    "CONFIGS": [
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/3/35_1_PT_007_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.5,
+            "PIXEL_SIZE": 0.111,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1
+                },
+                "D": {
+                    "DEPTH": 1,
+                    "RADIUS": 1
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/1/35_1_PT_003_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.6,
+            "PIXEL_SIZE": 0.111,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 18,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "C",
+            "REGION": {
+                "LENGTH": 18,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 8.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/2/35_1_PT_005_ch00_0.5.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.5,
+            "PIXEL_SIZE": 0.111,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/4/35_1_PT_009_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.5,
+            "PIXEL_SIZE": 0.111,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/5/035_1_010_keptStack1to201.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.5,
+            "PIXEL_SIZE": 0.111,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/7/034_7.lif_034_7_033_ch00.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 0.385,
+            "PIXEL_SIZE": 0.112,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 20,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        },
+        {
+            "VIDEO_PATH": "data/videos/PTs_videos/To_Nicolas/New_PT_Movies_For_Nicolas/8/CRI 1.5 1fds.avi",
+            "OUTPUT_DIR": "data/videos/output/pt_movies_for_nicolas",
+            "TIMESTEP": 2.5,
+            "PIXEL_SIZE": 0.13,
+            "CONTOUR": {
+                "KERNEL_SIZE": 7,
+                "SIGMA": 5,
+                "SPLINE_KNOTS_RATIO": 100,
+                "SPLINE_DEGREE": 3,
+                "GAMMA": 1.5,
+                "MASK": false
+            },
+            "TIP": {
+                "STEP": 2,
+                "WINDOW_SIZE": 25,
+                "EPS": 2.0,
+                "SAMPLES": 15
+            },
+            "MEMBRANE": {
+                "LENGTH": 10,
+                "THICKNESS": 4
+            },
+            "REGION_NAME": "B",
+            "REGION": {
+                "LENGTH": 10,
+                "A": {
+                    "DEPTH": 1.0
+                },
+                "B": {
+                    "THICKNESS": 0.5
+                },
+                "C": {
+                    "DEPTH": 1.0
+                },
+                "D": {
+                    "DEPTH": 1.0,
+                    "RADIUS": 1.0
+                }
+            }
+        }
+    ]
+}
