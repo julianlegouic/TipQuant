@@ -59,11 +59,6 @@ LENGTH_MAX = 40.0
     DEPTH_MIN = 1.0
     DEPTH_MAX = 20.0
 
-    [REGION.B]
-    THICKNESS = 0.5
-    THICKNESS_MIN = 0.1
-    THICKNESS_MAX = 5.0
-
     [REGION.C]
     DEPTH = 5.0
     DEPTH_MIN = 1.0
