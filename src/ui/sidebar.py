@@ -78,10 +78,10 @@ def region_sidebar(config, default_config, img_dir):
     """ makes the sidebar for region parameters. uses default_config parameters and config
     for users parameters. """
     st.sidebar.markdown("# Cytoplasm Region")
-    region_name = st.sidebar.selectbox("Type", ('A', 'B', 'C', 'D'), index=1)
+    region_name = st.sidebar.selectbox("Type", ('A', 'C', 'D'), index=1)
     st.sidebar.image(os.path.join(img_dir, f"Region{region_name}.png"), width=325)
 
-    if region_name == 'A' or region_name == 'B':
+    if region_name == 'A':
         region_length = st.sidebar.slider(
             "Length (um)",
             min_value=config["REGION"]["LENGTH_MIN"],
@@ -90,23 +90,14 @@ def region_sidebar(config, default_config, img_dir):
             key="region_length"
         )
         config["REGION"]["LENGTH"] = region_length
-        if region_name == 'A':
-            region_depth = st.sidebar.slider(
-                "Depth (um)",
-                min_value=default_config["REGION"]['A']["DEPTH_MIN"],
-                max_value=default_config["REGION"]['A']["DEPTH_MAX"],
-                value=default_config["REGION"]['A']["DEPTH"], step=0.1,
-                key="region_a_depth"
-            )
-            config["REGION"]['A']["DEPTH"] = region_depth
-        else:
-            region_thickness = st.sidebar.slider(
-                "Thickness (um)",
-                min_value=default_config["REGION"][region_name]["THICKNESS_MIN"],
-                max_value=default_config["REGION"][region_name]["THICKNESS_MAX"],
-                value=default_config["REGION"][region_name]["THICKNESS"], step=0.1, key="region_b_width"
-            )
-            config["REGION"]['B']["THICKNESS"] = region_thickness
+        region_depth = st.sidebar.slider(
+            "Depth (um)",
+            min_value=default_config["REGION"]['A']["DEPTH_MIN"],
+            max_value=default_config["REGION"]['A']["DEPTH_MAX"],
+            value=default_config["REGION"]['A']["DEPTH"], step=0.1,
+            key="region_a_depth"
+        )
+        config["REGION"]['A']["DEPTH"] = region_depth
 
     if region_name == 'C':
         region_depth = st.sidebar.slider(
@@ -156,34 +147,6 @@ def advanced_sidebar(config, default_config, img_dir):
     st.sidebar.markdown("##### Keeping mask visible")
     keep_mask = st.sidebar.checkbox("Mask visible option")
     config["CONTOUR"]["MASK"] = keep_mask
-
-    # st.sidebar.markdown("##### Kernel size")
-    # kernel_size = st.sidebar.slider(
-    #     "pixel size of the kernel used for frame preprocessing",
-    #     min_value=default_config["CONTOUR"]["KERNEL_SIZE_MIN"],
-    #     max_value=default_config["CONTOUR"]["KERNEL_SIZE_MAX"],
-    #     value=default_config["CONTOUR"]["KERNEL_SIZE"], step=2
-    # )
-    # config["CONTOUR"]["KERNEL_SIZE"] = kernel_size
-
-    # st.sidebar.markdown("##### Sigma")
-    # sigma = st.sidebar.slider(
-    #     "standard deviation of the gaussian blur",
-    #     min_value=default_config["CONTOUR"]["SIGMA_MIN"],
-    #     max_value=default_config["CONTOUR"]["SIGMA_MAX"],
-    #     value=default_config["CONTOUR"]["SIGMA"], step=2
-    # )
-    # config["CONTOUR"]["SIGMA"] = sigma
-
-    # st.sidebar.markdown("#### Contour smoothing")
-    # st.sidebar.markdown("##### Degree")
-    # degree = st.sidebar.slider(
-    #     "degree of the spline polynomials",
-    #     min_value=default_config["CONTOUR"]["SPLINE_DEGREE_MIN"],
-    #     max_value=default_config["CONTOUR"]["SPLINE_DEGREE_MAX"],
-    #     value=default_config["CONTOUR"]["SPLINE_DEGREE"], step=1
-    # )
-    # config["CONTOUR"]["SPLINE_DEGREE"] = degree
 
     st.sidebar.markdown("#### Tip Detection")
     st.sidebar.markdown("##### Window size")

@@ -145,7 +145,7 @@ There are also modules in `src/core/region.py`, that define the measurement area
 
 5. For each tube:
     1. We compute the membrane area by extending an arc of user-defined length and width around the tip with the `Membrane` module.
-    2. We compute the region of measurement inside the cytoplasm (non-overlapping with the membrane) with the `Region <A, B, C or D>` module.
+    2. We compute the region of measurement inside the cytoplasm (non-overlapping with the membrane) with the `Region <A, C or D>` module.
     3. We use the `Measure` module to compute useful figures from the masks above. A list of the measurements is described below. ![areas](data/assets/areas.png)
 
 6. We save the results and return them to the user.
@@ -193,7 +193,6 @@ Below parameters express the expected number of tips around a given tip. As the 
 
 - **type**: shape of the measurement region
 - **length**: length of the region
-- **thickness (for type B)**: thickness in micrometers of the type B region ("horseshoe")
 - **depth (for type A)**: depth of the "V" shape from the extremity of the membrane
 - **depth (for type D)**: depth of the center of the circle
 - **radius (for type D)**: radius of the circle
@@ -233,7 +232,7 @@ Here we will list the outputs of the application (the output directory is by def
 - **displacements.npy**: an array of array of size `(n_frames - step)` where each array contains the displacement of the membrane at each point on the curvilinear abscissa at a frame
 - **data.csv**: dataframe with `n_frames - step` rows containing the following columns:
   - area_growth: area of the difference between the pollen tube at step `t` and the pollen tube at step `t + 1`
-  - cytoplasm_intensity_mean: mean intensity inside the mask defined by region (B or C)
+  - cytoplasm_intensity_mean: mean intensity inside the mask defined by region (only C)
   - tip_size: the size of the tip defined by the distance between its two extremities
   - growth_vec_x,y: the x, y coordinates of the main growth direction at step `t` (computed from `t` to `t + step` with step defined by the parameter `tip.step`)
   - tip_x,y: the x, y coordinates of the tip

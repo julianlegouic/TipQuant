@@ -144,38 +144,6 @@ class RegionA(Region):
         return mask
 
 
-class RegionB(Region):
-    """ defines a region of type B (Horseshoe following the membrane) """
-
-    def __init__(self, thickness):
-        self.thickness = thickness
-
-    @classmethod
-    def from_config(cls, config):
-        thickness = int(config["REGION"]['B']["THICKNESS"] / config["PIXEL_SIZE"])
-        return cls(thickness=thickness)
-
-    def get_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
-        """
-        from membrane specs, builds the type B region mask
-        :param membrane_mask: binary mask of the membrane
-        :param membrane_contour: array of contour points for the membrane
-        :param membrane_thickness: width of the membrane
-        :param contour: contour of the pollen tube (for compatibility)
-        :param shape: shape of the produced mask (matches frame shape)
-        :return: region type B mask
-        """
-        thickness = 2 * self.thickness + membrane_thickness
-        mask = get_mask(
-            membrane_contour, shape, mask_type="lines", isClosed=False, thickness=thickness
-        )
-        cytoplasm_mask = get_mask(membrane_contour, shape, "fill")
-        mask = cv.bitwise_and(mask, cytoplasm_mask)
-        mask = np.subtract(mask, membrane_mask)
-        _, mask = cv.threshold(mask, 2, 255, cv.THRESH_BINARY)
-        return mask
-
-
 class RegionC(Region):
 
     """ defines a region of type C (filled inside membrane) """
