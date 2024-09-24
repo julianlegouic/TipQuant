@@ -75,7 +75,7 @@ conda activate tip_quant
 ## How to use it ?
 
 - The side bar on the left is dedicated to user input parameters
-![sidebar](data/assets/sidebar%20-%20copie.png)
+![sidebar](data/assets/sidebar.png)
 - You can load your video on the main panel
 ![upload_video](data/assets/upload_video.png)
 - Once you have uploaded your video and picked your parameters, you can click on the "Run" button, at the end of the side bar. Data will be saved locally in the path specified in the "Output directory" field (`data/output` by default).
