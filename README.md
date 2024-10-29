@@ -34,6 +34,8 @@ If not sure, the path to the newly created virtual environment should be mention
 >
 > If you still prefer to use Anaconda, an environment.yml file is available in the repository.
 >
+> **:warning:** However, dependencies and versions are not ensured so code might be malfunctioning.
+>
 > ```sh
 > cd $CODE_DIRECTORY
 > conda env create --file environment.yml
