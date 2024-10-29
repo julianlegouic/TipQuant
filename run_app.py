@@ -1,5 +1,5 @@
 import sys
-from streamlit import cli as stcli
+from streamlit.web import cli as stcli
 
 from src.utils import makedirs
 
