@@ -8,25 +8,37 @@ This project is open source and developed in python.
 
 ## Installation
 
-### Linux, MacOS
+To install TipQUANT on your machine you will need python 3.8 and Poetry (see the installation for Poetry [here](https://python-poetry.org/docs/#installation)).
 
-To install TipQUANT on your machine you will need python 3.6+.
+On Windows, you might find easier to work with Anaconda (<https://docs.anaconda.com/anaconda/install/windows/>), however usage Poetry is highly suggested.
 
-- Getting the code from the repository
+
+- Getting the code from the repository and clone it inside a working directory.
 
 ```sh
-cd $CODE_DIRECTORY
 git clone <todo insert github url>
+cd TipQuant
 ```
 
-- Setting up the python environment (use of virtualenv recommended)
+- Setting up the python environment
 
 ```sh
-python3 -m venv /path/to/new/virtual/environment
-source /path/to/new/virtual/environment/bin/activate
-(venv) cd $CODE_DIRECTORY
-(venv) pip install -r requirements.txt
+poetry install
+poetry shell # or source /path/to/new/virtual/environment/bin/activate
 ```
+
+The `source` command is here to replace the `poetry shell` command in case it is not working properly.
+If not sure, the path to the newly created virtual environment should be mentioned in the output of the first command `poetry install`.
+
+> **If on Windows with Anaconda**
+>
+> If you still prefer to use Anaconda, an environment.yml file is available in the repository.
+>
+> ```sh
+> cd $CODE_DIRECTORY
+> conda env create --file environment.yml
+> conda activate tip_quant
+> ```
 
 - You will also need to have ffmpeg installed
 
@@ -35,41 +47,13 @@ brew install ffmpeg  # mac
 sudo apt install ffmpeg  # ubuntu
 ```
 
+For Windows, see available builds at <https://github.com/BtbN/FFmpeg-Builds/releases>.
+Remember to add the bin folder to your windows `PATH` (see section 3 <http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/>)
+
 - Run the application
 
 ```sh
 (venv) python run_app.py
-```
-
-### Specific instructions for Mac M1
-
-On the latest Mac (as of October 2021), some packages are not compatible yet with the new CPU from Apple. You might need to install an x86_64 compiled version of Python in order to install all the packages. To do so, you can check out this [tutorial](https://julianlegouic.github.io/setup-MacM1-x86_64/) (only in French) or directly the source of the tutorial [here](https://stackoverflow.com/questions/68659865/cannot-pip-install-mediapipe-on-macos-m1) (until step 7 included).
-
-### Windows
-
-The easiest way to install this application is to use Anaconda (<https://docs.anaconda.com/anaconda/install/windows/>).
-
-- Getting the code from the repository (with github it is easier to use git bash command line tool)
-
-```sh
-cd $CODE_DIRECTORY
-git clone <insert github url>
-```
-
-- Setting up the python environement
-
-```sh
-cd $CODE_DIRECTORY
-conda env create --file environment.yml
-conda activate tip_quant
-```
-
-- You will also need to have ffmpeg installed (builds available at <https://github.com/BtbN/FFmpeg-Builds/releases>).
-- Remember to add the bin folder to your windows `PATH` (see section 3 <http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/>)
-- Run the application
-
-```sh
-(tip_quant) python run_app.py
 ```
 
 ## How to use it ?
