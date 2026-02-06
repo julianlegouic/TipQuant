@@ -51,7 +51,7 @@ def load_video(b_io, video_file):
     return video_file
 
 
-@st.cache(show_spinner=False)
+@st.cache_data
 def get_frames(b_io, file_path):
     """
     read BytesIO object from a video file
