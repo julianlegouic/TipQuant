@@ -127,15 +127,16 @@ def main():
                 save_output(output_mask, TMP_MASK_DIR)
         progress_bar.success("Measures are completed")
 
-
     raw_filelist = [f for f in os.listdir(TMP_RAW_DIR)]
+    mask_filelist = []
+    mask_filelist = [f for f in os.listdir(TMP_MASK_DIR)]
 
     if len(raw_filelist) > 2:
         # show video
         video_slot.video(TMP_RAW_OUTPUT_PATH)
         data_raw, membrane_intensities_raw, membrane_xs_raw, _ = read_output(TMP_RAW_DIR)
         data_mask, membrane_intensities_mask, membrane_xs_mask = None, None, None
-        if uploaded_file_mask:
+        if uploaded_file_mask and len(mask_filelist) > 2:
             data_mask, membrane_intensities_mask, membrane_xs_mask, _ = read_output(TMP_MASK_DIR)
 
         # make plots
@@ -185,7 +186,7 @@ def main():
         heatmap_raw = plot_membrane_heatmap(
             data_raw, membrane_intensities_raw, membrane_xs_raw, colorscale, other_fig, smooth.lower())
 
-        if uploaded_file_mask:
+        if uploaded_file_mask and len(mask_filelist) > 2:
             membrane_intensity_mask = plot_membrane_intensity(
                 data_mask, window_size, False)
             cytoplasm_intensity_mask = plot_cytoplasm_intensity(
