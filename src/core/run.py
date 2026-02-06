@@ -67,7 +67,7 @@ def get_tubes(frames, config, progress_bar=None):
 
     # detect contours
     if progress_bar is not None:
-        progress_bar("Detect contour", len(gray_frames))
+        progress_bar("Detecting contours on raw video", len(gray_frames))
 
     tubes = list()
     prev_contour = None
@@ -88,7 +88,7 @@ def get_tubes(frames, config, progress_bar=None):
             progress_bar.update()
 
     if progress_bar is not None:
-        progress_bar("Detect TIP", len(tubes) - step)
+        progress_bar("Detecting TIP on raw video", len(tubes) - step)
 
     for i in tqdm(range(len(tubes) - step), desc="Detecting TIP", total=(len(tubes) - step)):
         # find roi
@@ -126,7 +126,7 @@ def get_tubes(frames, config, progress_bar=None):
     return tubes
 
 
-def get_data(frames, tubes, config, region_name, progress_bar=None):
+def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="raw"):
 
     """ Computes measurement data from the tubes. """
 
@@ -170,7 +170,7 @@ def get_data(frames, tubes, config, region_name, progress_bar=None):
     displacements = list()
 
     if progress_bar is not None:
-        progress_bar("Data Measure", len(frames) - step)
+        progress_bar(f"Data Measure on {video_type} video...", len(frames) - step)
 
     for i in tqdm(range(len(frames) - step), desc="Data Measure", total=(len(frames) - step)):
 

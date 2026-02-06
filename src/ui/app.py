@@ -101,7 +101,7 @@ def main():
                 data_mask, membrane_intensities_mask, membrane_xs_mask, _, _, _, _ = measure_data_mask
                 save_frames(output_frames_mask, TMP_MASK_OUTPUT_PATH, force_codec="H264")
 
-        with st.spinner("Saving ..."):
+        with st.spinner("Saving results..."):
             # save into target directory
             time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             raw_video_name, _ = os.path.splitext(uploaded_file_raw.name)
