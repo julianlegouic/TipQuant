@@ -49,10 +49,10 @@ def main():
     run = st.button("Run", use_container_width=True)
 
     # Sidebar
-    video_params_sidebar(config, DEFAULT_CONFIG)
     st.sidebar.markdown("# Output")
     directory = st.sidebar.text_input("Output directory", "output")
-    model_sidebar(config, DEFAULT_CONFIG, TEMP_VIDEO_PATH)
+    video_params_sidebar(config, DEFAULT_CONFIG)
+    model_sidebar(config, DEFAULT_CONFIG, TMP_RAW_VIDEO_PATH)
     membrane_sidebar(config, DEFAULT_CONFIG)
     region_name = region_sidebar(config, DEFAULT_CONFIG, IMG_PATH)
     advanced_sidebar(config, DEFAULT_CONFIG, IMG_PATH)
