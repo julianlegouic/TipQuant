@@ -18,9 +18,12 @@ MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])  # tipQuan
 CONFIG_PATH = os.path.join(MAIN_DIRECTORY, "src/config.toml")
 DEFAULT_CONFIG = toml.load(CONFIG_PATH)
 IMG_PATH = os.path.join(MAIN_DIRECTORY, "data/assets")
-TEMP_DIR = os.path.join(MAIN_DIRECTORY, "temp")
-TEMP_VIDEO_PATH = os.path.join(MAIN_DIRECTORY, "temp/temp_video.mp4")
-TEMP_OUTPUT_PATH = os.path.join(MAIN_DIRECTORY, "temp/temp_video_output.mp4")
+TMP_RAW_DIR = os.path.join(MAIN_DIRECTORY, "tmp/raw")
+TMP_MASK_DIR = os.path.join(MAIN_DIRECTORY, "tmp/mask")
+TMP_RAW_VIDEO_PATH = os.path.join(MAIN_DIRECTORY, "tmp/raw/tmp_video_raw.mp4")
+TMP_MASK_VIDEO_PATH = os.path.join(MAIN_DIRECTORY, "tmp/mask/tmp_video_mask.mp4")
+TMP_RAW_OUTPUT_PATH = os.path.join(MAIN_DIRECTORY, "tmp/raw/tmp_video_raw_output.mp4")
+TMP_MASK_OUTPUT_PATH = os.path.join(MAIN_DIRECTORY, "tmp/mask/tmp_video_mask_output.mp4")
 config = DEFAULT_CONFIG.copy()
 
 
