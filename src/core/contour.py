@@ -114,7 +114,8 @@ class ContourDetection:
         mean = 0
         for c in contour:
             y, x = c
-            mean += video_frame[x, y]
+            mean += video_frame[x, y].astype(np.float32)
+
         return mean / len(contour)
 
     def _adjust_contour(self, video_frame, mask):

@@ -162,7 +162,7 @@ class Measure:
             mnormal = normals[ind]
             end = np.round(mpoint - membrane_thickness * mnormal).astype(int)
             measurement_line = line(mpoint[0], mpoint[1], end[0], end[1])
-            line_intensities = [frame[y, x] for x, y
+            line_intensities = [frame[y, x].astype(np.float32) for x, y
                                 in zip(measurement_line[0], measurement_line[1])
                                 if x < frame.shape[1] and y < frame.shape[0]]
             intensity = sum(line_intensities) / len(line_intensities) if line_intensities else 0
