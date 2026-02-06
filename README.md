@@ -1,58 +1,88 @@
 # TipQUANT
 
 Automated tool for retrieving data, such as tip location and membrane intensity distribution, from pollen growth videos.
+
 ![tube_raw](data/assets/tube_raw.png)
 ![tube_raw](data/assets/tube_processed.png)
 
-This project is open source and developed in python.
+This project is open source and developed in Python.
 
 ## Installation
 
-To install TipQUANT on your machine you will need python 3.8 and Poetry (see the installation for Poetry [here](https://python-poetry.org/docs/#installation)).
+The installation is available for Windows 11 and MacOS (at least since the M1 version). However there are a few pre-requisites to check to make the installation smoother.
 
-On Windows, you might find easier to work with Anaconda (<https://docs.anaconda.com/anaconda/install/windows/>), however usage Poetry is highly suggested.
+### Pre-requisites
 
+MacOS specific
 
-- Getting the code from the repository and clone it inside a working directory.
+* [Homebrew](https://brew.sh)
+
+Windows specific
+
+* Access to the Microsoft Store
+* Windows PowerShell (installable from the Microsoft Store)
+* `winget` (installable from the Microsoft Store)
+
+On both systems
+
+* Python 3.11
+  * On MacOS: a version of Python might be already installed but make sure you have the 3.11 installed locally), find more [here](https://www.python.org/downloads/macos/)
+  * On Windows: installable from the Microsoft Store
+* Google Chrome
+* [Poetry](https://python-poetry.org/docs/#installation)
+
+### Installation of FFMpeg
+
+On MacOS, with Homebrew
+
+```sh
+brew install ffmpeg
+```
+
+On Windows, first make sure **winget** is installed on your machine (you can find it on the Microsoft Store).
+Then, run the following command in your PowerShell terminal:
+
+```powershell
+winget install ffmpeg
+```
+
+Make sure you follow thorougly all the instructions printed out during the installation.
+
+### Clone repository
+
+Getting the code from the repository and clone or download it inside on your local machine. You will need to install Git separately if you want to clone it.
 
 ```sh
 git clone <todo insert github url>
 cd TipQuant
 ```
 
-- Setting up the python environment
+### Virtual environment
+
+* Setting up the Python environment
 
 ```sh
 poetry install
-poetry shell # or source /path/to/new/virtual/environment/bin/activate
 ```
 
-The `source` command is here to replace the `poetry shell` command in case it is not working properly.
-If not sure, the path to the newly created virtual environment should be mentioned in the output of the first command `poetry install`.
+- Activate the virtual environment
 
-> **If on Windows with Anaconda**
->
-> If you still prefer to use Anaconda, an environment.yml file is available in the repository.
->
-> **:warning:** However, dependencies and versions are not ensured so code might be malfunctioning.
->
-> ```sh
-> cd $CODE_DIRECTORY
-> conda env create --file environment.yml
-> conda activate tip_quant
-> ```
+```powershell
+# On Windows
+Invoke-Expression (poetry env activate)
+```
 
-- You will also need to have ffmpeg installed
+or
 
 ```sh
-brew install ffmpeg  # mac
-sudo apt install ffmpeg  # ubuntu
+# On MacOS
+eval $(poetry env activate) # or source /path/to/new/virtual/environment/bin/activate
 ```
 
-For Windows, see available builds at <https://github.com/BtbN/FFmpeg-Builds/releases>.
-Remember to add the bin folder to your windows `PATH` (see section 3 <http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/>)
+The `source` command is here to bypass the poetry command, but you need to know the path of the folder of the virtual environment.
+If not sure, the path to the newly created virtual environment should be mentioned in the output of the first command `poetry install`. Otherwise, it can be found with the command: `poetry env info --path`.
 
-- Run the application
+* Run the application
 
 ```sh
 (venv) python run_app.py
@@ -60,37 +90,24 @@ Remember to add the bin folder to your windows `PATH` (see section 3 <http://blo
 
 ## How to use it ?
 
-- The side bar on the left is dedicated to user input parameters
+* The side bar on the left is dedicated to user input parameters
 
 ![sidebar](data/assets/sidebar.png)
 
-- You can load your video on the main panel
+* You can load your video(s) on the main panel. When a video is uploaded as a mask video, the raw video is used as a reference for the contour detection. The computation of the measures are then done only once on both videos and contour detection is not applied on the mask video.
 
 ![upload_video](data/assets/upload_video.png)
 
-- Once you have uploaded your video and picked your parameters, you can click on the "Run" button, at the end of the side bar. Data will be saved locally in the path specified in the "Output directory" field (`data/output` by default).
+* Once you have uploaded your video(s) and picked your parameters, you can click on the "Run" button, at the end of the side bar. Data will be saved locally in the path specified in the "Output directory" field (`data/output` by default).
 
 ![run_button](data/assets/run_button.png)
-
-### Command-line
-
-We provide a command-line tool for convenience. To use it, activate your virtual environment (with the required packages installed) and run the command-line script:
-
-```sh
-source /path/to/new/virtual/environment/bin/activate
-(venv) python run_cli.py -c /path/to/config.json
-```
-
-An example config file is provided under `src/config.json`.
-
-The config file defines the same parameters as the GUI does. Be careful to setting the `OUTPUT_DIR` and `VIDEO_PATH` parameters properly.
 
 ## Model assumptions
 
 Our model is based on two key assumptions:
 
-- There is one only pollen tube in the video
-- The pollen tube cannot grow towards multiple direction at a given time
+* There is one only pollen tube in the video
+* The pollen tube cannot grow towards multiple direction at a given time
 
 ## How does it work ?
 
@@ -106,9 +123,9 @@ There are also modules in `src/core/region.py`, that define the measurement area
 
 #### Notes on object representation
 
-- A `contour` is represented by a `numpy.array` of size `n_contour_points * 2`. One key thing is that, points are sorted by adjacency in a counter-clockwise manner.
-- Normals and tangents are also `numpy.array` of size `n_contour_points * 2`. Objects tied to the contour should have the same length as the contour. It is also the case for `displacements` and `curvs` (curvatures), though they are scalars so their dimension is `n_contour_points * 1`.
-- Every variable mentionning `indices` is referring to the indices wrt a contour. For instance, to get the tip location from `tip_index`, we use `contour[tip_index]`.
+* A `contour` is represented by a `numpy.array` of size `n_contour_points * 2`. One key thing is that, points are sorted by adjacency in a counter-clockwise manner.
+* Normals and tangents are also `numpy.array` of size `n_contour_points * 2`. Objects tied to the contour should have the same length as the contour. It is also the case for `displacements` and `curvs` (curvatures), though they are scalars so their dimension is `n_contour_points * 1`.
+* Every variable mentionning `indices` is referring to the indices wrt a contour. For instance, to get the tip location from `tip_index`, we use `contour[tip_index]`.
 
 ### Main pipeline
 
@@ -147,46 +164,46 @@ Here we will describe every parameters of the model, though some are more sensit
 
 ### Video parameters (mandatory)
 
-- **pixel size**: the size of one pixel in micrometers
-- **timestep**: the time delta between two frames in seconds
+* **pixel size**: the size of one pixel in micrometers
+* **timestep**: the time delta between two frames in seconds
 
 ### Contour detection
 
-- **kernel size**: the size of the kernel used for preprocessing operations (gaussian blur, dilation and erosion) of the original frames
-- **sigma**: the standard deviation used in the gaussian blur
-- **gamma**: the gamma coefficient used in the gamma correction filter in preprocessing
+* **kernel size**: the size of the kernel used for preprocessing operations (gaussian blur, dilation and erosion) of the original frames
+* **sigma**: the standard deviation used in the gaussian blur
+* **gamma**: the gamma coefficient used in the gamma correction filter in preprocessing
 
 ### Splines
 
-- **number of knots**: number of contour points that will be considered as knot points. A float
+* **number of knots**: number of contour points that will be considered as knot points. A float
 value between 0 and 1 corresponds to a percentage of the number of points in the contour; or an
 integer that will be the number of knots
-- **degree** : splines degree
+* **degree** : splines degree
 
 ### Tip detection
 
-- **window size**: size of the window used to average contour points characteristics to find the tip. Larger values will cancel noise but will not detect well very localized growth.
-- **step**: number of frames used to look in the future, this is used to determine growth direction. Fast changing videos require a lesser step.
+* **window size**: size of the window used to average contour points characteristics to find the tip. Larger values will cancel noise but will not detect well very localized growth.
+* **step**: number of frames used to look in the future, this is used to determine growth direction. Fast changing videos require a lesser step.
 
 ### Tip correction
 
 Below parameters express the expected number of tips around a given tip. As the pollen tube grows, the tip is supposed to move relatively smoothly from one frame to another. Thus, if we look at the full picture (all the detected tips on the 2D plane), we expect a "chain" of tips. For one particular tip, the previous ones and next ones should be close, depending on the speed of growth.
 
-- **epsilon**: distance (um) to look from one tip for its neighbours
-- **samples**: number of tips expected in the epsilon distance
+* **epsilon**: distance (um) to look from one tip for its neighbours
+* **samples**: number of tips expected in the epsilon distance
 
 ### Membrane
 
-- **length**: length of the membrane in micrometers
-- **thickness**: thickness of the membrane in pixel units
+* **length**: length of the membrane in micrometers
+* **thickness**: thickness of the membrane in pixel units
 
 ### Cytoplasm region
 
-- **type**: shape of the measurement region
-- **length**: length of the region
-- **depth (for type A)**: depth of the "V" shape from the extremity of the membrane
-- **depth (for type D)**: depth of the center of the circle
-- **radius (for type D)**: radius of the circle
+* **type**: shape of the measurement region
+* **length**: length of the region
+* **depth (for type A)**: depth of the "V" shape from the extremity of the membrane
+* **depth (for type D)**: depth of the center of the circle
+* **radius (for type D)**: radius of the circle
 
 ## How to choose parameters?
 
@@ -214,29 +231,29 @@ You may want to adapt this parameter according to *how fast* the pollen tube is 
 
 Here we will list the outputs of the application (the output directory is by default `tmp`, however you can set it to your convenience):
 
-- **video.mp4**: a video showing the tip and measurement region on top of the original video
-- **membrane_xs.csv**: an array of size `N * 1` containing the curvilinear abscissa used for membrane measurements (measurements were interpolated to fit on this abscissa so that we can compare measurements along the membrane between frames)
-- **membrane_curvs.csv**: an array of size `(n_frames - step) * N` containing the curvatures of the membrane at each point on the curvilinear abscissa
-- **membrane_intensities.csv**: an array of size `(n_frames - step) * N` containing the intensities of the membrane at each point on the curvilinear abscissa
-- **normals.npy**: an array of array of size `(n_frames - step)` where each array contains the normals vectors of the membrane at each point on the curvilinear abscissa at a frame
-- **contours.npy**: an array of array of size `(n_frames - step)` where each array contains the contour of the tube at a frame
-- **displacements.npy**: an array of array of size `(n_frames - step)` where each array contains the displacement of the membrane at each point on the curvilinear abscissa at a frame
-- **data.csv**: dataframe with `n_frames - step` rows containing the following columns:
-  - area_growth: area of the difference between the pollen tube at step `t` and the pollen tube at step `t + 1`
-  - cytoplasm_intensity_mean: mean intensity inside the mask defined by region (only C)
-  - tip_size: the size of the tip defined by the distance between its two extremities
-  - growth_vec_x,y: the x, y coordinates of the main growth direction at step `t` (computed from `t` to `t + step` with step defined by the parameter `tip.step`)
-  - tip_x,y: the x, y coordinates of the tip
-  - growth_from_direction: this is the distance between the tip at step `t` and the contour at step `t + step`, following the main growth direction (i.e. we project the tip along the main growth direction towards the next contour)
-  - growth_from_tip: the distance between the tip at step `t` and the tip at step `t + step`
-  - growth_direction_angle: angle of the growth vector compared to the first growth vector
-  - time: the time scale (number of frame or ms)
+* **video.mp4**: a video showing the tip and measurement region on top of the original video
+* **membrane_xs.csv**: an array of size `N * 1` containing the curvilinear abscissa used for membrane measurements (measurements were interpolated to fit on this abscissa so that we can compare measurements along the membrane between frames)
+* **membrane_curvs.csv**: an array of size `(n_frames - step) * N` containing the curvatures of the membrane at each point on the curvilinear abscissa
+* **membrane_intensities.csv**: an array of size `(n_frames - step) * N` containing the intensities of the membrane at each point on the curvilinear abscissa
+* **normals.npy**: an array of array of size `(n_frames - step)` where each array contains the normals vectors of the membrane at each point on the curvilinear abscissa at a frame
+* **contours.npy**: an array of array of size `(n_frames - step)` where each array contains the contour of the tube at a frame
+* **displacements.npy**: an array of array of size `(n_frames - step)` where each array contains the displacement of the membrane at each point on the curvilinear abscissa at a frame
+* **data.csv**: dataframe with `n_frames - step` rows containing the following columns:
+  * area_growth: area of the difference between the pollen tube at step `t` and the pollen tube at step `t + 1`
+  * cytoplasm_intensity_mean: mean intensity inside the mask defined by region (only C)
+  * tip_size: the size of the tip defined by the distance between its two extremities
+  * growth_vec_x,y: the x, y coordinates of the main growth direction at step `t` (computed from `t` to `t + step` with step defined by the parameter `tip.step`)
+  * tip_x,y: the x, y coordinates of the tip
+  * growth_from_direction: this is the distance between the tip at step `t` and the contour at step `t + step`, following the main growth direction (i.e. we project the tip along the main growth direction towards the next contour)
+  * growth_from_tip: the distance between the tip at step `t` and the tip at step `t + step`
+  * growth_direction_angle: angle of the growth vector compared to the first growth vector
+  * time: the time scale (number of frame or ms)
   ![measures](data/assets/measures.png)
   ![measures_2](data/assets/measures_2.png)
 
 Additionnaly, the GUI provides a few plots for convenience, namely:
 
-- Line plot of plasma membrane mean intensity with respect to time
-- Line plot of cytoplasm mean intensity with respect to time
-- Line plot of area growth with respect to time
-- A heatmap with time as x, curvilinear abscissa as y and intensity as color from the membrane measures (made from the data in **membrane_intensities.csv** wrt **membrane_xs.csv**)
+* Line plot of plasma membrane mean intensity with respect to time
+* Line plot of cytoplasm mean intensity with respect to time
+* Line plot of area growth with respect to time
+* A heatmap with time as x, curvilinear abscissa as y and intensity as color from the membrane measures (made from the data in **membrane_intensities.csv** wrt **membrane_xs.csv**)
