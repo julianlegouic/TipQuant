@@ -235,20 +235,3 @@ def compute_weights_df(contour, prev_tip):
     weights_to_tip = weights_to_tip[~weights_to_tip.index.duplicated(keep="first")]
 
     return weights_to_tip
-
-
-def get_temp_dir(temp_dir):
-    subdirs = [x[0] for x in os.walk(temp_dir)][1:]
-
-    if len(subdirs) == 0:
-        return None
-
-    first_ts = datetime.datetime.strptime(os.path.split(subdirs[0])[-1], "%Y-%m-%d_%H-%M-%S")
-    directory = subdirs[0]
-    for subdir in subdirs:
-        timestamp_str = os.path.split(subdir)[-1]
-        timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M-%S")
-        if timestamp > first_ts:
-            directory = subdir
-            first_ts = timestamp
-    return directory
