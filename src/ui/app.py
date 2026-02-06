@@ -1,7 +1,8 @@
 import datetime
 import os
-import streamlit as st
+import platform
 import toml
+import streamlit as st
 
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
@@ -12,6 +13,8 @@ from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sideba
 from src.ui.utils import write_config, local_css
 from src.utils import clear_directory, makedirs, save_frames, get_frames, save_output, read_video, read_output
 
+TMP_CODEC = "mp4v" if platform.system() == "Windows" else "H264"
+RESULT_CODEC = "H264"
 MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])  # tipQuant directory
 CONFIG_PATH = os.path.join(MAIN_DIRECTORY, "src/config.toml")
 DEFAULT_CONFIG = toml.load(CONFIG_PATH)
@@ -65,13 +68,13 @@ def main():
             clear_directory(TMP_RAW_DIR)
             with st.spinner("Loading video ..."):
                 frames = get_frames(uploaded_file_raw, TMP_RAW_VIDEO_PATH)
-                save_frames(frames, TMP_RAW_VIDEO_PATH, force_codec="H264")
+                save_frames(frames, TMP_RAW_VIDEO_PATH, force_codec=TMP_CODEC)
         if uploaded_file_mask:
             clear_directory(TMP_MASK_DIR)
             with st.spinner("Loading video ..."):
                 frames = get_frames(uploaded_file_mask, TMP_MASK_VIDEO_PATH)
                 clear_directory(TMP_MASK_DIR)
-                save_frames(frames, TMP_MASK_VIDEO_PATH, force_codec="H264")
+                save_frames(frames, TMP_MASK_VIDEO_PATH, force_codec=TMP_CODEC)
 
     if os.path.exists(TMP_RAW_VIDEO_PATH):
         video_slot.video(TMP_RAW_VIDEO_PATH)
@@ -92,13 +95,13 @@ def main():
             output_raw = get_data(raw_frames, tubes, config, region_name, progress_bar, "raw")
             output_frames_raw, measure_data_raw = output_raw
             data_raw, membrane_intensities_raw, membrane_xs_raw, _, _, _, _ = measure_data_raw
-            save_frames(output_frames_raw, TMP_RAW_OUTPUT_PATH, force_codec="H264")
+            save_frames(output_frames_raw, TMP_RAW_OUTPUT_PATH, force_codec=RESULT_CODEC)
 
             if mask_frames is not None:
                 output_mask = get_data(mask_frames, tubes, config, region_name, progress_bar, "mask")
                 output_frames_mask, measure_data_mask = output_mask
                 data_mask, membrane_intensities_mask, membrane_xs_mask, _, _, _, _ = measure_data_mask
-                save_frames(output_frames_mask, TMP_MASK_OUTPUT_PATH, force_codec="H264")
+                save_frames(output_frames_mask, TMP_MASK_OUTPUT_PATH, force_codec=RESULT_CODEC)
 
         with st.spinner("Saving results..."):
             # save into target directory
