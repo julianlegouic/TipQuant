@@ -199,9 +199,9 @@ def keep_best_inter(intersect):
 
     :param intersect: result of the shapely intersection method
     """
-    np_intersect = np.round(
-        np.array(intersect.array_interface()["data"])
-    ).reshape(-1, 2).astype(np.int32)
+    np_intersect = np.array([geom.coords[0] if hasattr(geom, 'coords')
+                             else geom.xy for geom in intersect.geoms])
+    np_intersect = np.reshape(np.round(np_intersect), (-1, 2)).astype(np.int32)
     inter_1, inter_2 = None, None
     for pt in np_intersect:
         if inter_1 is None:

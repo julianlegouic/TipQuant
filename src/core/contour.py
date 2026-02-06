@@ -532,8 +532,8 @@ class ContourDisplacement:
                 if normal_line.intersects(next_contour_ring):
                     intersec = normal_line.intersection(next_contour_ring)
                     if isinstance(intersec, MultiPoint):
-                        displs = [np.linalg.norm(np.array([point.x, point.y]) - origin)
-                                  for point in intersec]
+                        displs = [np.linalg.norm(np.array([point.coords[0][0], point.coords[0][1]]) - origin)
+                                  for point in intersec.geoms]
                         displacement = min(displs)
                     else:
                         intersec = np.array([intersec.x, intersec.y])
