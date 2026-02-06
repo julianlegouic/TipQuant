@@ -25,7 +25,7 @@ def video_params_sidebar(config, default_config):
     config["TIMESTEP"] = timestep
 
 
-def model_sidebar(config, default_config, TEMP_VIDEO_PATH):
+def model_sidebar(config, default_config, TMP_VIDEO_PATH):
     """ makes the sidebar for model parameters. uses default_config parameters and config
     for users parameters. """
 
@@ -39,7 +39,7 @@ def model_sidebar(config, default_config, TEMP_VIDEO_PATH):
     config["CONTOUR"]["SPLINE_KNOTS_RATIO"] = knots_ratio
     preview = st.sidebar.button(label="Preview contour", key="cntprev")
     if preview:
-        frames = read_video(TEMP_VIDEO_PATH)
+        frames = read_video(TMP_VIDEO_PATH)
         frame = get_contour_preview(frames, config)
         st.sidebar.image(frame, width=325)
 
