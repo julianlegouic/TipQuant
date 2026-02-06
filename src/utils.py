@@ -1,7 +1,7 @@
 import datetime
 import os
 import re
-import skvideo.io
+import shutil
 
 import cv2 as cv
 import numpy as np
@@ -76,32 +76,33 @@ def get_frames(b_io, file_path):
     return frames
 
 
-def save_frames(frames, video_file):
+def save_frames(frames, video_file, force_codec=None):
     """
     saves a list a frames to a video
     :param frames: list of frames
     :param video_file: destination file
     """
-    _, ext = os.path.splitext(video_file)
-    if ext == ".mp4":
-        writer = skvideo.io.FFmpegWriter(video_file, outputdict={"-c:v": "libx264",
-                                                             "-pix_fmt": "yuv444p"})
+    h, w, _ = frames[0].shape
+    ext = os.path.splitext(video_file)[1].lower()
 
-        for frame in frames:
-            if len(frame.shape) == 2:
-                frame = np.expand_dims(frame, axis=-1)
-            writer.writeFrame(frame)
-        writer.close()
+    if force_codec is not None:
+        fourcc = cv.VideoWriter_fourcc(*force_codec)
+    elif ext in ('.mp4', '.m4v'):
+        fourcc = cv.VideoWriter_fourcc(*'mp4v')
+    elif ext == '.avi':
+        fourcc = cv.VideoWriter_fourcc(*'XVID')
     else:
-        h, w, _ = frames[0].shape
+        fourcc = cv.VideoWriter_fourcc(*'mp4v')
 
-        fourcc = cv.VideoWriter_fourcc(*'MJPG')
-        video = cv.VideoWriter(video_file, fourcc, 30, (w, h), 1)
+    video = cv.VideoWriter(video_file, fourcc, 30, (w, h), True)
 
-        for frame in frames:
-            video.write(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
+    for frame in frames:
+        # ensure 3-channel BGR for writer
+        if frame.ndim == 2:
+            frame = cv.cvtColor(frame, cv.COLOR_GRAY2BGR)
+        video.write(frame)
 
-        video.release()
+    video.release()
 
 
 def read_video(video_path):
