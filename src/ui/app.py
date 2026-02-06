@@ -31,11 +31,22 @@ def main():
     st.title("TipQUANT")
     local_css("./src/css/style.css")
 
-    # Video
-    uploaded_file = st.file_uploader("Select file", type=["mp4", "avi", "tif", "m4v"], key="fu")
-    load_video = st.button("Load video")
+    # Videos
+    col_vid_raw, col_vid_mask = st.columns(2)
+    with col_vid_raw:
+        st.header("Raw video")
+        with st.container(height=80, border=False):
+            st.caption("Video used as reference for detecting contours and running measures. If a second video is uploaded, the same contours will be used to run measures on this second video.")
+        uploaded_file_raw = st.file_uploader("Select file", type=["mp4", "avi", "tif", "m4v"], key="uf_raw")
+    with col_vid_mask:
+        st.header("Mask video")
+        with st.container(height=80, border=False):
+            st.caption("Optional: second video to run measures on, for example a video with a specific staining. If uploaded, the same contours detected on the raw video will be used to run measures on this video.")
+        uploaded_file_mask = st.file_uploader("Select file", type=["mp4", "avi", "tif", "m4v"], key="uf_mask")
+
+    load_video = st.button("Load video(s)", use_container_width=True)
     video_slot = st.empty()
-    run = st.button("Run")
+    run = st.button("Run", use_container_width=True)
 
     # Sidebar
     video_params_sidebar(config, DEFAULT_CONFIG)
