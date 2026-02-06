@@ -12,8 +12,6 @@ from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sideba
 from src.ui.utils import write_config, local_css
 from src.utils import clear_directory, makedirs, save_frames, get_frames, save_output, read_video, read_output
 
-st.set_option("deprecation.showfileUploaderEncoding", False)
-
 MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])  # tipQuant directory
 CONFIG_PATH = os.path.join(MAIN_DIRECTORY, "src/config.toml")
 DEFAULT_CONFIG = toml.load(CONFIG_PATH)
@@ -28,6 +26,7 @@ config = DEFAULT_CONFIG.copy()
 
 
 def main():
+    st.set_page_config(page_title="TipQUANT", layout="wide")
     st.title("TipQUANT")
     local_css("./src/css/style.css")
 
