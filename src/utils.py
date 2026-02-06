@@ -155,12 +155,6 @@ def read_output(result_dir):
     membrane_curvs = np.loadtxt(os.path.join(result_dir, "membrane_curvs.csv"), delimiter=';')
     return data, membrane_intensities, membrane_xs, membrane_curvs
 
-def clear_directory(dir_path):
-    """Clear all the content of a directory."""
-    for root, _, files in os.walk(dir_path):
-        for file in files:
-            os.remove(os.path.join(root, file))
-
 
 def get_contour_ring(contour):
         """
