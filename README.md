@@ -212,7 +212,7 @@ You may want to adapt this parameter according to *how fast* the pollen tube is 
 
 ## Output description
 
-Here we will list the outputs of the application (the output directory is by default `temp`, however you can set it to your convenience):
+Here we will list the outputs of the application (the output directory is by default `tmp`, however you can set it to your convenience):
 
 - **video.mp4**: a video showing the tip and measurement region on top of the original video
 - **membrane_xs.csv**: an array of size `N * 1` containing the curvilinear abscissa used for membrane measurements (measurements were interpolated to fit on this abscissa so that we can compare measurements along the membrane between frames)

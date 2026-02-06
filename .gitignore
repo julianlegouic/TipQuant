@@ -1,5 +1,6 @@
 data/*
 !data/assets/
+tmp/
 
 *.ipynb
 
