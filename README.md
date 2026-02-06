@@ -28,7 +28,7 @@ On both systems
 * Python 3.11
   * On MacOS: a version of Python might be already installed but make sure you have the 3.11 installed locally), find more [here](https://www.python.org/downloads/macos/)
   * On Windows: installable from the Microsoft Store
-* Google Chrome
+* Google Chrome (for the Kaleido Python package)
 * [Poetry](https://python-poetry.org/docs/#installation)
 
 ### Installation of FFMpeg
