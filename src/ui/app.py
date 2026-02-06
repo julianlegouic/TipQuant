@@ -58,51 +58,74 @@ def main():
     advanced_sidebar(config, DEFAULT_CONFIG, IMG_PATH)
 
     # Action
-    if uploaded_file and load_video:
-        clear_directory(TEMP_DIR)
-        with st.spinner("Loading video ..."):
-            # Currently we don't have access to the uploaded file path so we have to save the video
-            # in a temporary file which we know the localisation in order to load it properly
-            # https://github.com/streamlit/streamlit/issues/896.
-            # Moreover we don't know the extension of the file so a "tif" button option is provided
-            # in case one would want to upload sequences of images.
-            frames = get_frames(uploaded_file, TEMP_VIDEO_PATH)
-            # The temporary file should be in codec H264 in order to be visualized in streamlit.
-            # We use skvideo which make better use of ffmpeg than opencv for encoding.
-            # https://discuss.streamlit.io/t/problem-with-displaying-a-recorded-video/3458/10
-            save_frames(frames, TEMP_VIDEO_PATH)
+    if load_video:
+        # Currently we don't have access to the uploaded file path so we have to save the video
+        # in a temporary file which we know the localisation in order to load it properly
+        # https://github.com/streamlit/streamlit/issues/896.
+        if uploaded_file_raw:
+            clear_directory(TMP_RAW_DIR)
+            with st.spinner("Loading video ..."):
+                frames = get_frames(uploaded_file_raw, TMP_RAW_VIDEO_PATH)
+                save_frames(frames, TMP_RAW_VIDEO_PATH, force_codec="H264")
+        if uploaded_file_mask:
+            clear_directory(TMP_MASK_DIR)
+            with st.spinner("Loading video ..."):
+                frames = get_frames(uploaded_file_mask, TMP_MASK_VIDEO_PATH)
+                clear_directory(TMP_MASK_DIR)
+                save_frames(frames, TMP_MASK_VIDEO_PATH, force_codec="H264")
 
-    if os.path.exists(TEMP_VIDEO_PATH):
-        video_slot.video(TEMP_VIDEO_PATH)
+    if os.path.exists(TMP_RAW_VIDEO_PATH):
+        video_slot.video(TMP_RAW_VIDEO_PATH)
 
     if run:
         with st.spinner("Running ..."):
             progress_bar = ProgressionBar()
-            frames = read_video(TEMP_VIDEO_PATH)
-            assert len(frames) > 0
+            raw_frames = read_video(TMP_RAW_VIDEO_PATH)
+            assert len(raw_frames) > 0, "The video should contain at least one frame"
+            mask_frames = None
+            if uploaded_file_mask and os.path.exists(TMP_MASK_VIDEO_PATH):
+                mask_frames = read_video(TMP_MASK_VIDEO_PATH)
+                assert len(raw_frames) == len(mask_frames), "Raw video and mask video should have the same number of frames"
 
             # compute
-            tubes = get_tubes(frames, config, progress_bar)
-            output = get_data(frames, tubes, config, region_name, progress_bar)
-            output_frames, measure_data = output
-            data, membrane_intensities, membrane_xs, _, _, _, _ = measure_data
-            save_frames(output_frames, TEMP_OUTPUT_PATH)
+            tubes = get_tubes(raw_frames, config, progress_bar)
+
+            output_raw = get_data(raw_frames, tubes, config, region_name, progress_bar, "raw")
+            output_frames_raw, measure_data_raw = output_raw
+            data_raw, membrane_intensities_raw, membrane_xs_raw, _, _, _, _ = measure_data_raw
+            save_frames(output_frames_raw, TMP_RAW_OUTPUT_PATH, force_codec="H264")
+
+            if mask_frames is not None:
+                output_mask = get_data(mask_frames, tubes, config, region_name, progress_bar, "mask")
+                output_frames_mask, measure_data_mask = output_mask
+                data_mask, membrane_intensities_mask, membrane_xs_mask, _, _, _, _ = measure_data_mask
+                save_frames(output_frames_mask, TMP_MASK_OUTPUT_PATH, force_codec="H264")
 
         with st.spinner("Saving ..."):
             # save into target directory
             time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            video_name, _ = os.path.splitext(uploaded_file.name)
-            result_dir = os.path.join("data", directory, f"{time}_{video_name}")
-            makedirs(result_dir)
-            save_output(output, result_dir)
-            write_config(config, os.path.join(result_dir, "config.toml"))
-            heatmap = plot_membrane_heatmap(data, membrane_intensities, membrane_xs, "Jet", None)
-            heatmap.write_html(os.path.join(result_dir, "heatmap.html"))
-            heatmap.write_image(os.path.join(result_dir, "heatmap.svg"))
-
+            raw_video_name, _ = os.path.splitext(uploaded_file_raw.name)
+            result_dir_raw = os.path.join("data", directory, f"{time}_{raw_video_name}")
+            makedirs(result_dir_raw)
+            save_output(output_raw, result_dir_raw)
+            write_config(config, os.path.join(result_dir_raw, "config.toml"))
+            heatmap = plot_membrane_heatmap(data_raw, membrane_intensities_raw, membrane_xs_raw, "Jet", None)
+            heatmap.write_html(os.path.join(result_dir_raw, "heatmap.html"))
+            heatmap.write_image(os.path.join(result_dir_raw, "heatmap.svg"))
             # save into temp directory
-            save_output(output, TEMP_DIR)
+            save_output(output_raw, TMP_RAW_DIR)
 
+            # repeat for mask video if exists
+            if mask_frames is not None:
+                mask_video_name, _ = os.path.splitext(uploaded_file_mask.name)
+                result_dir_mask = os.path.join("data", directory, f"{time}_{mask_video_name}")
+                makedirs(result_dir_mask)
+                save_output(output_mask, result_dir_mask)
+                write_config(config, os.path.join(result_dir_mask, "config.toml"))
+                heatmap = plot_membrane_heatmap(data_mask, membrane_intensities_mask, membrane_xs_mask, "Jet", None)
+                heatmap.write_html(os.path.join(result_dir_mask, "heatmap.html"))
+                heatmap.write_image(os.path.join(result_dir_mask, "heatmap.svg"))
+                save_output(output_mask, TMP_MASK_DIR)
         progress_bar.success("Measures are completed")
 
     filelist = [f for f in os.listdir(TEMP_DIR)]
