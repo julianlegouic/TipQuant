@@ -128,12 +128,16 @@ def main():
                 save_output(output_mask, TMP_MASK_DIR)
         progress_bar.success("Measures are completed")
 
-    filelist = [f for f in os.listdir(TEMP_DIR)]
 
-    if len(filelist) > 2:
+    raw_filelist = [f for f in os.listdir(TMP_RAW_DIR)]
+
+    if len(raw_filelist) > 2:
         # show video
-        video_slot.video(TEMP_OUTPUT_PATH)
-        data, membrane_intensities, membrane_xs, _ = read_output(TEMP_DIR)
+        video_slot.video(TMP_RAW_OUTPUT_PATH)
+        data_raw, membrane_intensities_raw, membrane_xs_raw, _ = read_output(TMP_RAW_DIR)
+        data_mask, membrane_intensities_mask, membrane_xs_mask = None, None, None
+        if uploaded_file_mask:
+            data_mask, membrane_intensities_mask, membrane_xs_mask, _ = read_output(TMP_MASK_DIR)
 
         # make plots
         st.header("Measures")
@@ -143,26 +147,18 @@ def main():
                                 max_value=10,
                                 value=1,
                                 step=1)
-        membrane_intensity = plot_membrane_intensity(data, window_size, False)
+
+        growth_area_raw = plot_growth_area(data_raw, window_size, False)
         st.plotly_chart(
-            plot_membrane_intensity(data, window_size, True),
-            use_container_width=True,
+            plot_growth_area(data_raw, window_size, True),
+            width="stretch"
         )
-        cytoplasm_intensity = plot_cytoplasm_intensity(data, window_size, False)
+        direction_angle_raw = plot_direction_angle(data_raw, window_size, final=False)
         st.plotly_chart(
-            plot_cytoplasm_intensity(data, window_size, True),
-            use_container_width=True
+            plot_direction_angle(data_raw, window_size, final=True),
+            width="stretch"
         )
-        growth_area = plot_growth_area(data, window_size, False)
-        st.plotly_chart(
-            plot_growth_area(data, window_size, True),
-            use_container_width=True
-        )
-        direction_angle = plot_direction_angle(data, window_size, final=False)
-        st.plotly_chart(
-            plot_direction_angle(data, window_size, final=True),
-            use_container_width=True
-        )
+
         colorscale = st.selectbox("Color",
                                   ("Viridis", "Inferno", "Plasma", "Jet",
                                    "Oranges", "solar", "deep", "Purp"),
@@ -175,18 +171,79 @@ def main():
                                                  "Growth area",
                                                  "Direction angle"),
                                         )
+
+        membrane_intensity_raw = plot_membrane_intensity(
+            data_raw, window_size, False)
+        cytoplasm_intensity_raw = plot_cytoplasm_intensity(
+            data_raw, window_size, False)
         labels_to_plot = {
-            "Membrane mean intensity": membrane_intensity,
-            "Cytoplasm mean intensity": cytoplasm_intensity,
-            "Growth area": growth_area,
-            "Direction angle": direction_angle
+            "Membrane mean intensity": membrane_intensity_raw,
+            "Cytoplasm mean intensity": cytoplasm_intensity_raw,
+            "Growth area": growth_area_raw,
+            "Direction angle": direction_angle_raw
         }
         other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
-        heatmap = plot_membrane_heatmap(data, membrane_intensities, membrane_xs, colorscale, other_fig, smooth.lower())
-        st.plotly_chart(
-            heatmap,
-            use_container_width=True
-        )
+        heatmap_raw = plot_membrane_heatmap(
+            data_raw, membrane_intensities_raw, membrane_xs_raw, colorscale, other_fig, smooth.lower())
+
+        if uploaded_file_mask:
+            membrane_intensity_mask = plot_membrane_intensity(
+                data_mask, window_size, False)
+            cytoplasm_intensity_mask = plot_cytoplasm_intensity(
+                data_mask, window_size, False)
+            labels_to_plot = {
+                "Membrane mean intensity": membrane_intensity_mask,
+                "Cytoplasm mean intensity": cytoplasm_intensity_mask,
+                "Growth area": growth_area_raw,
+                "Direction angle": direction_angle_raw
+            }
+            other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
+            heatmap_mask = plot_membrane_heatmap(
+                data_mask, membrane_intensities_mask, membrane_xs_mask, colorscale, other_fig, smooth.lower())
+
+            raw_data_column, mask_data_column = st.columns(2)
+            with raw_data_column:
+                st.subheader("Raw video measures")
+                st.plotly_chart(
+                    plot_membrane_intensity(data_raw, window_size, True),
+                    width="stretch",
+                )
+                st.plotly_chart(
+                    plot_cytoplasm_intensity(data_raw, window_size, True),
+                    width="stretch"
+                )
+                st.plotly_chart(
+                    heatmap_raw,
+                    width="stretch"
+                )
+            with mask_data_column:
+                st.subheader("Mask video measures")
+                st.plotly_chart(
+                    plot_membrane_intensity(data_mask, window_size, True),
+                    width="stretch",
+                )
+                st.plotly_chart(
+                    plot_cytoplasm_intensity(data_mask, window_size, True),
+                    width="stretch"
+                )
+                st.plotly_chart(
+                    heatmap_mask,
+                    width="stretch"
+                )
+        else:
+            st.subheader("Raw video measures")
+            st.plotly_chart(
+                plot_membrane_intensity(data_raw, window_size, True),
+                width="stretch",
+            )
+            st.plotly_chart(
+                plot_cytoplasm_intensity(data_raw, window_size, True),
+                width="stretch"
+            )
+            st.plotly_chart(
+                heatmap_raw,
+                width="stretch"
+            )
 
 
 if __name__ == "__main__":
