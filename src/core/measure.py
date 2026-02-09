@@ -245,7 +245,7 @@ class Measure:
         if tip_growth_line.intersects(next_contour_line):
             intersec = tip_growth_line.intersection(next_contour_line)
             if isinstance(intersec, MultiPoint):
-                intersec = intersec[0]
+                intersec = intersec.geoms[0]
             intersec = np.array([intersec.x, intersec.y])
             growth = np.linalg.norm(intersec - tip)
             growth *= self.pixel_size
