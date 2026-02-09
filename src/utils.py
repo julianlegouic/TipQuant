@@ -82,7 +82,7 @@ def save_frames(frames, video_file, force_codec=None):
     :param frames: list of frames
     :param video_file: destination file
     """
-    h, w, _ = frames[0].shape
+    h, w = frames[0].shape[:2]
     ext = os.path.splitext(video_file)[1].lower()
 
     if force_codec is not None:
