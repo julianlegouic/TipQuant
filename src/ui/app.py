@@ -6,16 +6,17 @@ import streamlit as st
 
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
-                             plot_membrane_intensity, plot_direction_angle)
+                         plot_membrane_intensity, plot_direction_angle)
 from src.ui.progressionbar import ProgressionBar
 from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sidebar,
-                                region_sidebar, advanced_sidebar)
+                            region_sidebar, advanced_sidebar)
 from src.ui.utils import write_config, local_css
 from src.utils import clear_directory, makedirs, save_frames, get_frames, save_output, read_video, read_output
 
 TMP_CODEC = "mp4v" if platform.system() == "Windows" else "H264"
 RESULT_CODEC = "H264"
-MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])  # tipQuant directory
+# tipQuant directory
+MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])
 CONFIG_PATH = os.path.join(MAIN_DIRECTORY, "src/config.toml")
 DEFAULT_CONFIG = toml.load(CONFIG_PATH)
 IMG_PATH = os.path.join(MAIN_DIRECTORY, "data/assets")

@@ -11,6 +11,7 @@ from src.core.utils import get_mask
 class Measure:
 
     """ class that provides measurement computations on the pollen tube. """
+
     def __init__(self, timestep, pixel_size):
         """
         :param timestep: number of s in between frames

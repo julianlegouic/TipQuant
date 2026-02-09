@@ -157,30 +157,30 @@ def read_output(result_dir):
 
 
 def get_contour_ring(contour):
-        """
-        we use shapely to compute intersections so we transform the contour as an array to
-        a shapely linear ring
-        :param contour: contour points
-        :return: shapely linear ring corresponding to the contour
-        """
-        contour_ring = LinearRing(contour)
+    """
+    we use shapely to compute intersections so we transform the contour as an array to
+    a shapely linear ring
+    :param contour: contour points
+    :return: shapely linear ring corresponding to the contour
+    """
+    contour_ring = LinearRing(contour)
 
-        # correct the contour if not valid (aka self-intersections exist)
-        while not contour_ring.is_valid:
-            # find the point of self-intersection
-            p = re.compile("\[(.*?)\]")
-            wrong_point = p.findall(explain_validity(contour_ring))
-            if len(wrong_point) > 0:
-                # extract the point as an array if founded
-                wrong_point = wrong_point[0]
-                wrong_point = np.array(list(map(int, wrong_point.split(' '))))
-                wrong_index = np.where((contour == wrong_point).all(1))[0]
-                if len(wrong_index) > 0:
-                    # remove the point(s) (if multiple) from the contour
-                    contour = np.delete(contour, wrong_index, axis=0)
-                    contour_ring = LinearRing(contour)
+    # correct the contour if not valid (aka self-intersections exist)
+    while not contour_ring.is_valid:
+        # find the point of self-intersection
+        p = re.compile("\[(.*?)\]")
+        wrong_point = p.findall(explain_validity(contour_ring))
+        if len(wrong_point) > 0:
+            # extract the point as an array if founded
+            wrong_point = wrong_point[0]
+            wrong_point = np.array(list(map(int, wrong_point.split(' '))))
+            wrong_index = np.where((contour == wrong_point).all(1))[0]
+            if len(wrong_index) > 0:
+                # remove the point(s) (if multiple) from the contour
+                contour = np.delete(contour, wrong_index, axis=0)
+                contour_ring = LinearRing(contour)
 
-        return contour_ring
+    return contour_ring
 
 
 def keep_best_inter(intersect):

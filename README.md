@@ -88,7 +88,7 @@ If not sure, the path to the newly created virtual environment should be mention
 (venv) python run_app.py
 ```
 
-## How to use it ?
+## How to use it?
 
 * The side bar on the left is dedicated to user input parameters
 
@@ -109,7 +109,7 @@ Our model is based on two key assumptions:
 * There is one only pollen tube in the video
 * The pollen tube cannot grow towards multiple direction at a given time
 
-## How does it work ?
+## How does it work?
 
 As a reminder, our work aims to automatically find the tip, defined by the point on the contour with maximal growth on the pollen tube, so that we can derive useful measurements from it.
 
