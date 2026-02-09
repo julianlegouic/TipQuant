@@ -54,3 +54,4 @@ geckodriver.log
 .DS_Store
 .idea/
 poetry.lock
+.streamlit/
