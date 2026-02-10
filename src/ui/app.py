@@ -62,19 +62,19 @@ def main():
 
     # Action
     if load_video:
+        # Clear both temporary directories to avoid any data corruption
+        clear_directory(TMP_RAW_DIR)
+        clear_directory(TMP_MASK_DIR)
         # Currently we don't have access to the uploaded file path so we have to save the video
         # in a temporary file which we know the localisation in order to load it properly
         # https://github.com/streamlit/streamlit/issues/896.
         if uploaded_file_raw:
-            clear_directory(TMP_RAW_DIR)
             with st.spinner("Loading video ..."):
                 frames = get_frames(uploaded_file_raw, TMP_RAW_VIDEO_PATH)
                 save_frames(frames, TMP_RAW_VIDEO_PATH, force_codec=TMP_CODEC)
         if uploaded_file_mask:
-            clear_directory(TMP_MASK_DIR)
             with st.spinner("Loading video ..."):
                 frames = get_frames(uploaded_file_mask, TMP_MASK_VIDEO_PATH)
-                clear_directory(TMP_MASK_DIR)
                 save_frames(frames, TMP_MASK_VIDEO_PATH, force_codec=TMP_CODEC)
 
     if os.path.exists(TMP_RAW_VIDEO_PATH):
@@ -106,6 +106,8 @@ def main():
 
         with st.spinner("Saving results..."):
             # save into target directory
+            if uploaded_file_raw is None:
+                raise AttributeError("Raw video is required")
             time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
             raw_video_name, _ = os.path.splitext(uploaded_file_raw.name)
             result_dir_raw = os.path.join("data", directory, f"{time}_{raw_video_name}")
@@ -119,7 +121,7 @@ def main():
             save_output(output_raw, TMP_RAW_DIR)
 
             # repeat for mask video if exists
-            if mask_frames is not None:
+            if mask_frames is not None and uploaded_file_mask is not None:
                 mask_video_name, _ = os.path.splitext(uploaded_file_mask.name)
                 result_dir_mask = os.path.join("data", directory, f"{time}_{mask_video_name}")
                 makedirs(result_dir_mask)
@@ -129,6 +131,7 @@ def main():
                 heatmap.write_html(os.path.join(result_dir_mask, "heatmap.html"))
                 heatmap.write_image(os.path.join(result_dir_mask, "heatmap.svg"))
                 save_output(output_mask, TMP_MASK_DIR)
+
         progress_bar.success("Measures are completed")
 
     raw_filelist = [f for f in os.listdir(TMP_RAW_DIR)]
