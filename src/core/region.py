@@ -202,6 +202,8 @@ class RegionC(Region):
                 sub_cont = np.concatenate([contour[end:], contour[:start]])
 
             mask = get_mask(sub_cont, shape, mask_type="fill")
+        else:
+            mask = np.zeros(shape, dtype=np.uint8)
 
         return mask
 
