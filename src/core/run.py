@@ -176,13 +176,13 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
 
         # membrane mask
         tube.membrane_indices, membrane_xs = membrane.get_contour_indices(tube.contour, tube.tip_index)
-        membrane_mask = membrane.get_mask(tube.contour, tube.membrane_contour, shape)
+        membrane_mask = membrane.get_membrane_mask(tube.contour, tube.membrane_contour, shape)
 
         # for region masks as it can be of different length we use the membrane for region object
         mr_indices, _ = membrane_for_region.get_contour_indices(tube.contour, tube.tip_index)
         membrane_region_cnt = tube.contour[mr_indices]
-        mr_mask = membrane_for_region.get_mask(tube.contour, membrane_region_cnt, shape)
-        region_mask = region.get_mask(mr_mask, membrane_region_cnt, membrane_for_region.thickness, tube.contour, shape)
+        mr_mask = membrane_for_region.get_membrane_mask(tube.contour, membrane_region_cnt, shape)
+        region_mask = region.get_region_mask(mr_mask, membrane_region_cnt, membrane_for_region.thickness, tube.contour, shape)
 
         normals.append(tube.N)
         contours.append(tube.contour)
