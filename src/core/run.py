@@ -95,6 +95,13 @@ def get_tubes(frames, config, progress_bar=None):
             next_contour=tubes[i + step].contour,
             shape=shape
         )
+        if tubes[i].roi_indices == []:
+            tubes[i].displacements = np.array([])
+            tubes[i].direction = tubes[i-1].direction if i > 0 else np.array([0, 0], dtype=np.float64)
+            tubes[i].tip_index = tubes[i-1].tip_index if i > 0 else None
+            tubes[i].valid_detection = False
+            continue
+
         # detect tip
         tubes[i].displacements = cnt_displ.get_displacements(
             current_contour=tubes[i].contour,
@@ -159,7 +166,7 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
     data = pd.DataFrame(columns=["membrane_intensity_mean", "cytoplasm_intensity_mean",
                                  "area_growth", "tip_size",
                                  "growth_vec_x", "growth_vec_y", "growth_from_direction",
-                                 "growth_from_tip", "growth_direction_angle"])
+                                 "growth_from_tip", "growth_direction_angle", "valid_detection", "valid_region"])
     membranes_intensities = list()
     membranes_curvatures = list()
     normals = list()
@@ -188,19 +195,24 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
         contours.append(tube.contour)
         displacements.append(tube.displacements)
 
+        data.loc[i, "valid_detection"] = tube.valid_detection
+        data.loc[i, "valid_region"] = True if region_mask.sum() > 0 else False
+
         # Area growth
         area_growth = measure.area_growth(
             contour=tube.contour,
             prev_contour=tubes[i - 1].contour if i > 0 else None,
             prev_membrane_contour=tubes[i - 1].contour[tubes[i - 1].membrane_indices] if i > 0 else None,
-            shape=shape
+            shape=shape,
+            valid_detection=tube.valid_detection
         )
         data.loc[i, "area_growth"] = area_growth
 
         # Growth direction angle
         growth_angle = measure.growth_angle(
             direction=tube.direction,
-            reference=tubes[0].direction
+            reference=tubes[0].direction,
+            valid_detection=tube.valid_detection
         )
         data.loc[i, "growth_direction_angle"] = growth_angle
 
