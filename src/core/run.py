@@ -114,14 +114,19 @@ def get_tubes(frames, config, progress_bar=None):
             displacements=tubes[i].displacements,
             normals=tubes[i].N
         )
-        tubes[i].tip_index = tip_detect.get_tips_from_normals(
-            normals=tubes[i].N,
-            displacements=tubes[i].displacements,
-            direction=tubes[i].direction,
-            roi_indices=tubes[i].roi_indices,
-            prev_tip=tubes[i-1].tip if i > 0 else None,
-            contour=tubes[i].contour
-        )
+        # init tip for the first frame
+        if i == 0:
+            tubes[i].tip_index = tip_detect.init_tip(tubes[i].contour)
+        else:
+            tubes[i].tip_index = tip_detect.get_tips_from_normals(
+                normals=tubes[i].N,
+                displacements=tubes[i].displacements,
+                direction=tubes[i].direction,
+                roi_indices=tubes[i].roi_indices,
+                prev_tip=tubes[i-1].tip if i > 0 else None,
+                contour=tubes[i].contour
+            )
+        tubes[i].valid_detection = True
 
         if progress_bar is not None:
             progress_bar.update()
