@@ -326,8 +326,7 @@ class ContourCharacterization:
         :param array: array of vectors
         :return: normalized array
         """
-        f = lambda vector: vector / np.linalg.norm(vector)
-        normed = np.apply_along_axis(f, axis=1, arr=array)
+        normed = np.apply_along_axis(lambda vector: vector / np.linalg.norm(vector), axis=1, arr=array)
         return normed
 
     @staticmethod
@@ -380,8 +379,7 @@ class ContourCharacterization:
         :param us: delta between tangent points
         :return: curvatures
         """
-        gradient = lambda x: np.gradient(x, us)
-        dT = np.apply_along_axis(gradient, axis=0, arr=T)
+        dT = np.apply_along_axis(lambda x: np.gradient(x, us), axis=0, arr=T)
         K = np.apply_along_axis(np.linalg.norm, axis=1, arr=dT)
         return K
 

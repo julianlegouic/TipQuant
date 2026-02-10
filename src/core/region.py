@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-from shapely.geometry import LineString, LinearRing
+from shapely.geometry import LineString
 from src.core.utils import get_mask, sample_cnt
 from src.utils import get_contour_ring, keep_best_inter
 

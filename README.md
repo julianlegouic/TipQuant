@@ -65,7 +65,7 @@ cd TipQuant
 poetry install
 ```
 
-- Activate the virtual environment
+* Activate the virtual environment
 
 ```powershell
 # On Windows
