@@ -2,9 +2,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-def plot_growth_area(data, window_size, final):
+def plot_growth_area(data, window_size, final, aggregation_seconds=None):
     """
     line plot of area growth wrt time
+    :param aggregation_seconds: aggregated area growth every X seconds
     :param final: if final is true returns a figure else a scatter
     :param window_size: size of the window to compute the rolling mean
     :param data: data from the core algorithm
@@ -15,6 +16,11 @@ def plot_growth_area(data, window_size, final):
 
     y_col = "area_growth"
     x_col = "time"
+
+    data = data.copy()
+    if aggregation_seconds:
+        data[x_col] = (data[x_col] // aggregation_seconds) * aggregation_seconds
+        data = data.groupby(x_col, as_index=False)[y_col].sum()
 
     data[y_col] = data[y_col].rolling(window_size, min_periods=1).mean()
 

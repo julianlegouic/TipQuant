@@ -155,9 +155,18 @@ def main():
                                 value=1,
                                 step=1)
 
-        growth_area_raw = plot_growth_area(data_raw, window_size, False)
+        aggregation_seconds = st.slider("Number of seconds to aggregate area growth",
+                                min_value=0,
+                                max_value=15,
+                                value=0,
+                                step=5)
+
+        if aggregation_seconds == 0:
+            aggregation_seconds = None
+
+        growth_area_raw = plot_growth_area(data_raw, window_size, False, aggregation_seconds)
         st.plotly_chart(
-            plot_growth_area(data_raw, window_size, True),
+            plot_growth_area(data_raw, window_size, True, aggregation_seconds),
             width="stretch"
         )
         direction_angle_raw = plot_direction_angle(data_raw, window_size, final=False)
