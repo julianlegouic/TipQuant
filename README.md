@@ -1,92 +1,153 @@
 # TipQUANT
 
-Automated tool for retrieving data, such as tip location and membrane intensity distribution, from pollen growth videos.
+Automated tool for retrieving data, such as tip location and membrane intensity distribution, from pollen growth videos, and quantifying pollen tube growth and fluorescence intensity using contour detection.
 
 ![tube_raw](data/assets/tube_raw.png)
 ![tube_raw](data/assets/tube_processed.png)
 
 This project is open source and developed in Python.
+**Supported OS:** Windows 10/11, macOS, Linux
 
-## Installation
+## Setup of the application
 
 The installation is available for Windows 11 and MacOS (at least since the M1 version). However there are a few pre-requisites to check to make the installation smoother.
 
 ### Pre-requisites
 
-MacOS specific
+Before installing the software, you must ensure the following tools are installed and configured correctly.
 
-* [Homebrew](https://brew.sh)
+<details>
+<summary><h3>Windows version</h3></summary>
 
-Windows specific
+<h4> 1. Python 3.11 (Strict Requirement) </h4>
 
-* Access to the Microsoft Store
-* Windows PowerShell (installable from the Microsoft Store)
-* `winget` (installable from the Microsoft Store)
+* **Download:** [Python 3.11.9](https://www.python.org/downloads/release/python-3119/)
+* **Critical Installation Step:** You **MUST** check the box **"Add python.exe to PATH"** at the bottom of the installer window.
+* *Note:* Do not use Python 3.12 or 3.13 as they may cause dependency conflicts.
 
-On both systems
+<h4> 2. FFmpeg (Video Processing) </h4>
 
-* Python 3.11
-  * On MacOS: a version of Python might be already installed but make sure you have the 3.11 installed locally), find more [here](https://www.python.org/downloads/macos/)
-  * On Windows: installable from the Microsoft Store
-* Google Chrome (for the Kaleido Python package)
-* [Poetry](https://python-poetry.org/docs/#installation)
+Windows does not have FFmpeg installed by default.
 
-### Installation of FFMpeg
+1. Download the **full build** (e.g., `ffmpeg-git-full.7z` or `.zip`) from [Gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
+2. Extract the folder and rename it to `ffmpeg`.
+3. Move it to `C:\ffmpeg`.
+4. **Add to PATH (Required):**
+    * Search for "Edit the system environment variables" -> "Environment Variables".
+    * Under **System variables**, edit **Path**.
+    * Add a new entry: `C:\ffmpeg\bin`.
+    * **Restart your terminal/PowerShell** for changes to take effect.
 
-On MacOS, with Homebrew
+<h4> 3. Poetry (Dependency Manager) </h4>
+
+1. Install via PowerShell:
+
+    ```powershell
+    (Invoke-WebRequest -Uri [https://install.python-poetry.org](https://install.python-poetry.org) -UseBasicParsing).Content | py -
+    ```
+
+2. If the `poetry` command is not found, add `%APPDATA%\Python\Scripts` to your User Path variable.
+
+</details>
+
+<details>
+<summary><h3>MacOS version</h3></summary>
+
+Make sure you have Homebrew installed. This installation requires `curl` to be installed, but it should be installed by default.
+
+```sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+<h4>1. Python 3.11</h4>
+
+On MacOS, a version of Python might be already installed but make sure you have the 3.11 installed locally. Find more on the official [Python page](https://www.python.org/downloads/release/python-3119/) and download their official installer.
+
+<h4>2. FFMpeg (video processing)</h4>
+
+On MacOS, just simply run the following command with our previously installed Homebrew:
 
 ```sh
 brew install ffmpeg
 ```
 
-On Windows, first make sure **winget** is installed on your machine (you can find it on the Microsoft Store).
-Then, run the following command in your PowerShell terminal:
+<h4>3. Poetry</h4>
 
-```powershell
-winget install ffmpeg
+Following their [tutorial](https://python-poetry.org/docs/#installation), run the following command:
+
+```sh
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-Make sure you follow thorougly all the instructions printed out during the installation.
+</details>
 
-### Clone repository
+### Install and Run
+
+#### Clone the repository
 
 Getting the code from the repository and clone or download it inside on your local machine. You will need to install Git separately if you want to clone it.
 
 ```sh
-git clone <todo insert github url>
+git clone [https://github.com/YourRepo/TipQUANT.git](https://github.com/YourRepo/TipQUANT.git)
 cd TipQuant
 ```
 
-### Virtual environment
+Now to setup the Python environment use Poetry to install the required Python libraries.
 
-* Setting up the Python environment
+<details>
+<summary><h3>Windows version</h3></summary>
 
-```sh
+<h4>Install Dependencies</h4>
+
+```powershell
+# Force usage of Python 3.11
+poetry env use py -3.11
+
+# Install packages
 poetry install
 ```
 
-* Activate the virtual environment
+*Troubleshooting:* If you see an error regarding `Microsoft Visual C++ 14.0`, please install the [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) ("Desktop development with C++" workload).
 
-```powershell
-# On Windows
-Invoke-Expression (poetry env activate)
-```
+<h4>Run the Application</h4>
 
-or
+**Note for Poetry 2.0+ Users:** The `poetry shell` command is deprecated. Please use the command below to launch the application directly.
+
+1. **Start the Application:**
+    Run this command inside the `TipQUANT` directory:
+
+    ```powershell
+    poetry run python run_app.py
+    ```
+
+2. **Using the Interface:**
+    The browser will open automatically at `http://localhost:8501`.
+    * **Raw Video / Reference Channel:** Upload the brightfield video used for contour/growth detection.
+    * **Mask Video / Signal Channel:** Upload the fluorescence video for intensity measurement.
+
+If you find any issue during the setup, please take a loot at our troubleshooting [section](#troubleshooting).
+
+</details>
+
+<details>
+<summary><h3>MacOS version</h3></summary>
+
+<h4>Install Dependencies</h4>
 
 ```sh
-# On MacOS
-eval $(poetry env activate) # or source /path/to/new/virtual/environment/bin/activate
+poetry install
+eval $(poetry env activate)
 ```
 
-The `source` command is here to bypass the poetry command, but you need to know the path of the folder of the virtual environment.
-If not sure, the path to the newly created virtual environment should be mentioned in the output of the first command `poetry install`. Otherwise, it can be found with the command: `poetry env info --path`.
+<h4>Run the Application</h4>
 
-* Run the application
+After activating the virtual environment, run the following command:
 
 ```sh
 (venv) python run_app.py
 ```
+
+</details>
 
 ## How to use it?
 
@@ -257,3 +318,17 @@ Additionnaly, the GUI provides a few plots for convenience, namely:
 * Line plot of cytoplasm mean intensity with respect to time
 * Line plot of area growth with respect to time
 * A heatmap with time as x, curvilinear abscissa as y and intensity as color from the membrane measures (made from the data in **membrane_intensities.csv** wrt **membrane_xs.csv**)
+
+# Troubleshooting
+
+**Q: `ffmpeg` is not recognized as an internal or external command.**
+**A:** You did not add `C:\ffmpeg\bin` to your System Environment Variables (Path), or you did not restart your terminal after doing so.
+
+**Q: `poetry: The term 'poetry' is not recognized...`**
+**A:** Add `%APPDATA%\Python\Scripts` to your User Environment Variables (Path).
+
+**Q: `The command 'shell' is not installed...`**
+**A:** You are using Poetry 2.0. Do not use `poetry shell`. Instead, preface your commands with `poetry run...`.
+
+**Q: `ModuleNotFoundError: No module named 'streamlit'`**
+**A:** You are running standard python instead of the virtual environment. Use `poetry run python run_app.py`.
