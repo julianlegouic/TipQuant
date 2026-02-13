@@ -170,10 +170,6 @@ def main():
             width="stretch"
         )
         direction_angle_raw = plot_direction_angle(data_raw, window_size, final=False)
-        st.plotly_chart(
-            plot_direction_angle(data_raw, window_size, final=True),
-            width="stretch"
-        )
 
         colorscale = st.selectbox("Color",
                                   ("Viridis", "Inferno", "Plasma", "Jet",
