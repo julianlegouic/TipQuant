@@ -101,7 +101,7 @@ Now to setup the Python environment use Poetry to install the required Python li
 
 ```powershell
 # Force usage of Python 3.11
-poetry env use py -3.11
+poetry env use 3.11
 
 # Install packages
 poetry install
