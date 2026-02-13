@@ -3,7 +3,7 @@
 Automated tool for retrieving data, such as tip location and membrane intensity distribution, from pollen growth videos, and quantifying pollen tube growth and fluorescence intensity using contour detection.
 
 ![tube_raw](data/assets/tube_raw.png)
-![tube_raw](data/assets/tube_processed.png)
+![tube_processed](data/assets/tube_processed.png)
 
 This project is open source and developed in Python.
 **Supported OS:** Windows 10/11, macOS, Linux
@@ -122,8 +122,8 @@ poetry install
 
 2. **Using the Interface:**
     The browser will open automatically at `http://localhost:8501`.
-    * **Raw Video / Reference Channel:** Upload the brightfield video used for contour/growth detection.
-    * **Mask Video / Signal Channel:** Upload the fluorescence video for intensity measurement.
+    * **Primary Video / Reference Channel:** Upload the brightfield video used for contour/growth detection.
+    * **Secondary Video / Signal Channel:** Upload the fluorescence video for intensity measurement.
 
 If you find any issue during the setup, please take a loot at our troubleshooting [section](#troubleshooting).
 
@@ -155,7 +155,7 @@ After activating the virtual environment, run the following command:
 
 ![sidebar](data/assets/sidebar.png)
 
-* You can load your video(s) on the main panel. When a video is uploaded as a mask video, the raw video is used as a reference for the contour detection. The computation of the measures are then done only once on both videos and contour detection is not applied on the mask video.
+* You can load your video(s) on the main panel. When a video is uploaded as a parallel video, the primary video is used as a reference for the contour detection. The computation of the measures are then done only once on both videos and contour detection from the primary video is applied on the second video.
 
 ![upload_video](data/assets/upload_video.png)
 
