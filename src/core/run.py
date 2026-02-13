@@ -8,7 +8,7 @@ from src.core.contour import (ContourDetection, ContourParameterization,
                               ContourCharacterization, ContourDisplacement, ContourROI)
 from src.core.measure import Measure
 from src.core.model import PollenTube
-from src.core.region import Membrane, RegionA, RegionC, RegionD
+from src.core.region import Membrane, RegionA, RegionB, RegionC
 from src.core.tip import TipDetection, TipCorrection
 from src.core.utils import cast_to_gray, make_frame, normalize_frames
 
@@ -152,10 +152,10 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
     membrane_for_region = Membrane.from_region_config(config)
     if region_name == 'A':
         region = RegionA.from_config(config)
-    elif region_name == 'C':
-        region = RegionC.from_config(config)
+    elif region_name == 'B':
+        region = RegionB.from_config(config)
     else:
-        region = RegionD.from_config(config)
+        region = RegionC.from_config(config)
     measure = Measure.from_config(config)
 
     # get scales

@@ -59,12 +59,12 @@ LENGTH_MAX = 40.0
     DEPTH_MIN = 1.0
     DEPTH_MAX = 20.0
 
-    [REGION.C]
+    [REGION.B]
     DEPTH = 5.0
     DEPTH_MIN = 1.0
     DEPTH_MAX = 10.0
 
-    [REGION.D]
+    [REGION.C]
     DEPTH = 2.5
     DEPTH_MIN = 1.0
     DEPTH_MAX = 20.0
