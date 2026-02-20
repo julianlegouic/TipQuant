@@ -113,7 +113,6 @@ def main():
                 save_frames(output_frames_secondary, TMP_SECONDARY_OUTPUT_PATH, force_codec=RESULT_CODEC)
 
         with st.spinner("Saving results..."):
-        with st.spinner("Saving results..."):
             # save into target directory
             if uploaded_file_primary is None:
                 raise AttributeError("Primary video is required")
