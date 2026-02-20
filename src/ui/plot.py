@@ -22,7 +22,7 @@ def plot_growth_area(data, window_size, final, aggregation_frames=1):
     data_aggregated[x_aggregated_col] = data_aggregated.index  # Use index as frame number
 
     data_aggregated[x_aggregated_col] = (data_aggregated[x_aggregated_col] // aggregation_frames) * aggregation_frames
-    data_aggregated = data_aggregated.groupby(x_aggregated_col, as_index=False)[[x_col, y_col]].sum()
+    data_aggregated = data_aggregated.groupby(x_aggregated_col, as_index=False).agg({x_col: 'max', y_col: 'sum'})
     data_aggregated.sort_values(by=x_col, inplace=True)  # Ensure data is sorted by time
 
     data_aggregated[y_col] = data_aggregated[y_col].rolling(window_size, min_periods=1).mean()
