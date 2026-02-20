@@ -121,6 +121,7 @@ class RegionA(Region):
         contour_ring = get_contour_ring(contour)
 
         # check if there are any intersection between the translated line and the contour
+        point = np.array([0, 0])
         if translated_line.intersects(contour_ring):
             intersect = translated_line.intersection(contour_ring)
             inter_1, inter_2 = keep_best_inter(intersect)
@@ -130,7 +131,7 @@ class RegionA(Region):
                     (inter_1[0] + inter_2[0])/2,
                     (inter_1[1] + inter_2[1])/2
                 ]
-            ).astype(np.int32)
+            )
 
         # add the point to the contour to create the cone-shape roi
         point = np.expand_dims(np.round(point).astype(np.int32), axis=0)
@@ -144,27 +145,27 @@ class RegionA(Region):
         return mask
 
 
-class RegionC(Region):
+class RegionB(Region):
 
-    """ defines a region of type C (filled inside membrane) """
+    """ defines a region of type B (filled inside membrane) """
 
     def __init__(self, depth):
         self.depth = depth
 
     @classmethod
     def from_config(cls, config):
-        depth = round(config["REGION"]['C']["DEPTH"] / config["PIXEL_SIZE"])
+        depth = round(config["REGION"]['B']["DEPTH"] / config["PIXEL_SIZE"])
         return cls(depth=depth)
 
     def get_region_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
         """
-        from membrane specs, builds the type C region mask
+        from membrane specs, builds the type B region mask
         :param membrane_mask: binary mask of the membrane (for compatibility)
         :param membrane_contour: array of contour points for the membrane
         :param membrane_thickness: thickness of the membrane (for compatibility)
         :param contour: contour of the pollen tube
         :param shape: shape of the produced mask (matches frame shape)
-        :return: region type C mask
+        :return: region type B mask
         """
         start_cnt, end_cnt = sample_cnt(membrane_contour)
         imp = (start_cnt + end_cnt) / 2
@@ -208,9 +209,9 @@ class RegionC(Region):
         return mask
 
 
-class RegionD(Region):
+class RegionC(Region):
 
-    """ defines a region of type D """
+    """ defines a region of type C """
 
     def __init__(self, depth, radius):
         self.radius = radius
@@ -218,19 +219,19 @@ class RegionD(Region):
 
     @classmethod
     def from_config(cls, config):
-        depth = round(config["REGION"]['D']["DEPTH"] / config["PIXEL_SIZE"])
-        radius = round(config["REGION"]['D']["RADIUS"] / config["PIXEL_SIZE"])
+        depth = round(config["REGION"]['C']["DEPTH"] / config["PIXEL_SIZE"])
+        radius = round(config["REGION"]['C']["RADIUS"] / config["PIXEL_SIZE"])
         return cls(depth=depth, radius=radius)
 
     def get_region_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
         """
-        computes the region D mask
+        computes the region C mask
         :param membrane_mask: binary mask of the membrane (for compatibility)
         :param membrane_contour: array of contour points for the membrane
         :param membrane_thickness: thickness of the membrane (for compatibility)
         :param contour: contour of the pollen tube (for compatibility)
         :param shape: shape of the produced mask (matches frame shape)
-        :return: region type D mask
+        :return: region type C mask
         """
         start_cnt, end_cnt = sample_cnt(membrane_contour)
         imp = (start_cnt + end_cnt) / 2

@@ -2,9 +2,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-def plot_growth_area(data, window_size, final):
+def plot_growth_area(data, window_size, final, aggregation_frames=1):
     """
     line plot of area growth wrt time
+    :param aggregation_frames: aggregated area growth every X frames
     :param final: if final is true returns a figure else a scatter
     :param window_size: size of the window to compute the rolling mean
     :param data: data from the core algorithm
@@ -15,10 +16,18 @@ def plot_growth_area(data, window_size, final):
 
     y_col = "area_growth"
     x_col = "time"
+    x_aggregated_col = "frame"
 
-    data[y_col] = data[y_col].rolling(window_size, min_periods=1).mean()
+    data_aggregated = data.copy()
+    data_aggregated[x_aggregated_col] = data_aggregated.index  # Use index as frame number
 
-    scatter = go.Scatter(x=data[x_col], y=data[y_col])
+    data_aggregated[x_aggregated_col] = (data_aggregated[x_aggregated_col] // aggregation_frames) * aggregation_frames
+    data_aggregated = data_aggregated.groupby(x_aggregated_col, as_index=False)[[x_col, y_col]].sum()
+    data_aggregated.sort_values(by=x_col, inplace=True)  # Ensure data is sorted by time
+
+    data_aggregated[y_col] = data_aggregated[y_col].rolling(window_size, min_periods=1).mean()
+
+    scatter = go.Scatter(x=data_aggregated[x_col], y=data_aggregated[y_col])
     if final:
         fig = go.Figure(data=scatter)
         fig.update_layout(xaxis_title=x_axis_label)

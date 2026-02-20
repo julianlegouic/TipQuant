@@ -78,7 +78,7 @@ def region_sidebar(config, default_config, img_dir):
     """ makes the sidebar for region parameters. uses default_config parameters and config
     for users parameters. """
     st.sidebar.markdown("# Cytoplasm Region")
-    region_name = st.sidebar.selectbox("Type", ('A', 'C', 'D'), index=1)
+    region_name = st.sidebar.selectbox("Type", ('A', 'B', 'C'), index=1)
     st.sidebar.image(os.path.join(img_dir, f"Region{region_name}.png"), width=325)
 
     if region_name == 'A':
@@ -99,33 +99,33 @@ def region_sidebar(config, default_config, img_dir):
         )
         config["REGION"]['A']["DEPTH"] = region_depth
 
+    if region_name == 'B':
+        region_depth = st.sidebar.slider(
+            "Depth (um)",
+            min_value=default_config["REGION"]['B']["DEPTH_MIN"],
+            max_value=default_config["REGION"]['B']["DEPTH_MAX"],
+            value=default_config["REGION"]['B']["DEPTH"], step=0.5,
+            key="region_b_depth"
+        )
+        config["REGION"]['B']["DEPTH"] = region_depth
+
     if region_name == 'C':
         region_depth = st.sidebar.slider(
             "Depth (um)",
             min_value=default_config["REGION"]['C']["DEPTH_MIN"],
             max_value=default_config["REGION"]['C']["DEPTH_MAX"],
-            value=default_config["REGION"]['C']["DEPTH"], step=0.5,
-            key="region_a_depth"
+            value=default_config["REGION"]['C']["DEPTH"], step=0.1,
+            key="region_c_depth"
         )
         config["REGION"]['C']["DEPTH"] = region_depth
-
-    if region_name == 'D':
-        region_depth = st.sidebar.slider(
-            "Depth (um)",
-            min_value=default_config["REGION"]['D']["DEPTH_MIN"],
-            max_value=default_config["REGION"]['D']["DEPTH_MAX"],
-            value=default_config["REGION"]['D']["DEPTH"], step=0.1,
-            key="region_d_depth"
-        )
-        config["REGION"]['D']["DEPTH"] = region_depth
         region_radius = st.sidebar.slider(
             "Radius (um)",
-            min_value=default_config["REGION"]['D']["RADIUS_MIN"],
-            max_value=default_config["REGION"]['D']["RADIUS_MAX"],
-            value=default_config["REGION"]['D']["RADIUS"], step=0.1,
-            key="region_d_radius"
+            min_value=default_config["REGION"]['C']["RADIUS_MIN"],
+            max_value=default_config["REGION"]['C']["RADIUS_MAX"],
+            value=default_config["REGION"]['C']["RADIUS"], step=0.1,
+            key="region_c_radius"
         )
-        config["REGION"]['D']["RADIUS"] = region_radius
+        config["REGION"]['C']["RADIUS"] = region_radius
 
     return region_name
 

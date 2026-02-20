@@ -8,7 +8,7 @@ from src.core.contour import (ContourDetection, ContourParameterization,
                               ContourCharacterization, ContourDisplacement, ContourROI)
 from src.core.measure import Measure
 from src.core.model import PollenTube
-from src.core.region import Membrane, RegionA, RegionC, RegionD
+from src.core.region import Membrane, RegionA, RegionB, RegionC
 from src.core.tip import TipDetection, TipCorrection
 from src.core.utils import cast_to_gray, make_frame, normalize_frames
 
@@ -65,7 +65,7 @@ def get_tubes(frames, config, progress_bar=None):
 
     # detect contours
     if progress_bar is not None:
-        progress_bar("Detecting contours on raw video...", len(gray_frames))
+        progress_bar("Detecting contours on primary video...", len(gray_frames))
 
     tubes = list()
     prev_contour = None
@@ -86,7 +86,7 @@ def get_tubes(frames, config, progress_bar=None):
             progress_bar.update()
 
     if progress_bar is not None:
-        progress_bar("Detecting TIP on raw video...", len(tubes) - step)
+        progress_bar("Detecting TIP on primary video...", len(tubes) - step)
 
     for i in tqdm(range(len(tubes) - step), desc="Detecting TIP", total=(len(tubes) - step)):
         # find roi
@@ -136,7 +136,7 @@ def get_tubes(frames, config, progress_bar=None):
     return tubes
 
 
-def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="raw"):
+def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="primary"):
     """ Computes measurement data from the tubes. """
 
     # read config
@@ -152,10 +152,10 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
     membrane_for_region = Membrane.from_region_config(config)
     if region_name == 'A':
         region = RegionA.from_config(config)
-    elif region_name == 'C':
-        region = RegionC.from_config(config)
+    elif region_name == 'B':
+        region = RegionB.from_config(config)
     else:
-        region = RegionD.from_config(config)
+        region = RegionC.from_config(config)
     measure = Measure.from_config(config)
 
     # get scales

@@ -30,12 +30,9 @@
                     "DEPTH": 1.0
                 },
                 "B": {
-                    "THICKNESS": 0.5
+                    "DEPTH": 0.5
                 },
                 "C": {
-                    "DEPTH": 4.0
-                },
-                "D": {
                     "DEPTH": 1.0,
                     "RADIUS": 1.0
                 }
