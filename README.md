@@ -101,10 +101,10 @@ Now to setup the Python environment use Poetry to install the required Python li
 
 ```powershell
 # Force usage of Python 3.11
-poetry env use 3.11
+poetry env use python3.11
 
 # Install packages
-poetry install
+poetry install --without dev
 ```
 
 *Troubleshooting:* If you see an error regarding `Microsoft Visual C++ 14.0`, please install the [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) ("Desktop development with C++" workload).
@@ -135,7 +135,7 @@ If you find any issue during the setup, please take a loot at our troubleshootin
 <h4>Install Dependencies</h4>
 
 ```sh
-poetry install
+poetry install --without dev
 eval $(poetry env activate)
 ```
 
