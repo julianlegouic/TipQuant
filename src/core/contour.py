@@ -114,7 +114,8 @@ class ContourDetection:
         mean = 0
         for c in contour:
             y, x = c
-            mean += video_frame[x, y]
+            mean += video_frame[x, y].astype(np.float32)
+
         return mean / len(contour)
 
     def _adjust_contour(self, video_frame, mask):
@@ -532,8 +533,8 @@ class ContourDisplacement:
                 if normal_line.intersects(next_contour_ring):
                     intersec = normal_line.intersection(next_contour_ring)
                     if isinstance(intersec, MultiPoint):
-                        displs = [np.linalg.norm(np.array([point.x, point.y]) - origin)
-                                  for point in intersec]
+                        displs = [np.linalg.norm(np.array([point.coords[0][0], point.coords[0][1]]) - origin)
+                                  for point in intersec.geoms]
                         displacement = min(displs)
                     else:
                         intersec = np.array([intersec.x, intersec.y])

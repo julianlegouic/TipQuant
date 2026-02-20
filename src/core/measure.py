@@ -11,6 +11,7 @@ from src.core.utils import get_mask
 class Measure:
 
     """ class that provides measurement computations on the pollen tube. """
+
     def __init__(self, timestep, pixel_size):
         """
         :param timestep: number of s in between frames
@@ -162,7 +163,7 @@ class Measure:
             mnormal = normals[ind]
             end = np.round(mpoint - membrane_thickness * mnormal).astype(int)
             measurement_line = line(mpoint[0], mpoint[1], end[0], end[1])
-            line_intensities = [frame[y, x] for x, y
+            line_intensities = [frame[y, x].astype(np.float32) for x, y
                                 in zip(measurement_line[0], measurement_line[1])
                                 if x < frame.shape[1] and y < frame.shape[0]]
             intensity = sum(line_intensities) / len(line_intensities) if line_intensities else 0
@@ -245,7 +246,7 @@ class Measure:
         if tip_growth_line.intersects(next_contour_line):
             intersec = tip_growth_line.intersection(next_contour_line)
             if isinstance(intersec, MultiPoint):
-                intersec = intersec[0]
+                intersec = intersec.geoms[0]
             intersec = np.array([intersec.x, intersec.y])
             growth = np.linalg.norm(intersec - tip)
             growth *= self.pixel_size

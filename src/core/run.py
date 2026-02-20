@@ -5,7 +5,7 @@ from tqdm import tqdm
 from scipy.interpolate import splev
 
 from src.core.contour import (ContourDetection, ContourParameterization,
-                                  ContourCharacterization, ContourDisplacement, ContourROI)
+                              ContourCharacterization, ContourDisplacement, ContourROI)
 from src.core.measure import Measure
 from src.core.model import PollenTube
 from src.core.region import Membrane, RegionA, RegionC, RegionD
@@ -14,7 +14,6 @@ from src.core.utils import cast_to_gray, make_frame, normalize_frames
 
 
 def get_contour_preview(frames, config):
-
     """ Computes a preview image of the detected contour on a frame and its spline knots. """
 
     gray_frames = [frame.copy() for frame in frames]
@@ -42,7 +41,6 @@ def get_contour_preview(frames, config):
 
 
 def get_tubes(frames, config, progress_bar=None):
-
     """ Process tubes (contour, normals, tip, ...) for each frame. """
 
     # read config
@@ -67,7 +65,7 @@ def get_tubes(frames, config, progress_bar=None):
 
     # detect contours
     if progress_bar is not None:
-        progress_bar("Detect contour", len(gray_frames))
+        progress_bar("Detecting contours on raw video...", len(gray_frames))
 
     tubes = list()
     prev_contour = None
@@ -88,7 +86,7 @@ def get_tubes(frames, config, progress_bar=None):
             progress_bar.update()
 
     if progress_bar is not None:
-        progress_bar("Detect TIP", len(tubes) - step)
+        progress_bar("Detecting TIP on raw video...", len(tubes) - step)
 
     for i in tqdm(range(len(tubes) - step), desc="Detecting TIP", total=(len(tubes) - step)):
         # find roi
@@ -126,8 +124,7 @@ def get_tubes(frames, config, progress_bar=None):
     return tubes
 
 
-def get_data(frames, tubes, config, region_name, progress_bar=None):
-
+def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="raw"):
     """ Computes measurement data from the tubes. """
 
     # read config
@@ -170,9 +167,10 @@ def get_data(frames, tubes, config, region_name, progress_bar=None):
     displacements = list()
 
     if progress_bar is not None:
-        progress_bar("Data Measure", len(frames) - step)
+        progress_bar(
+            f"Data measure on {video_type} video...", len(frames) - step)
 
-    for i in tqdm(range(len(frames) - step), desc="Data Measure", total=(len(frames) - step)):
+    for i in tqdm(range(len(frames) - step), desc="Data measure", total=(len(frames) - step)):
 
         tube = tubes[i]
 

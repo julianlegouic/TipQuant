@@ -1,7 +1,7 @@
 import datetime
 import os
 import re
-import skvideo.io
+import shutil
 
 import cv2 as cv
 import numpy as np
@@ -25,6 +25,20 @@ def makedirs(path, exist_ok=True):
             os.remove(os.path.join(path, f))
 
 
+def clear_directory(dir_path):
+    """Clear all the content of a directory."""
+    if os.path.exists(dir_path):
+        for filename in os.listdir(dir_path):
+            file_path = os.path.join(dir_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(f'Failed to delete {file_path}. Reason: {e}')
+
+
 def load_video(b_io, video_file):
     """
     loads video to the BytesIO object
@@ -37,7 +51,7 @@ def load_video(b_io, video_file):
     return video_file
 
 
-@st.cache(show_spinner=False)
+@st.cache_data
 def get_frames(b_io, file_path):
     """
     read BytesIO object from a video file
@@ -62,32 +76,33 @@ def get_frames(b_io, file_path):
     return frames
 
 
-def save_frames(frames, video_file):
+def save_frames(frames, video_file, force_codec=None):
     """
     saves a list a frames to a video
     :param frames: list of frames
     :param video_file: destination file
     """
-    _, ext = os.path.splitext(video_file)
-    if ext == ".mp4":
-        writer = skvideo.io.FFmpegWriter(video_file, outputdict={"-c:v": "libx264",
-                                                             "-pix_fmt": "yuv444p"})
+    h, w = frames[0].shape[:2]
+    ext = os.path.splitext(video_file)[1].lower()
 
-        for frame in frames:
-            if len(frame.shape) == 2:
-                frame = np.expand_dims(frame, axis=-1)
-            writer.writeFrame(frame)
-        writer.close()
+    if force_codec is not None:
+        fourcc = cv.VideoWriter_fourcc(*force_codec)
+    elif ext in ('.mp4', '.m4v'):
+        fourcc = cv.VideoWriter_fourcc(*'mp4v')
+    elif ext == '.avi':
+        fourcc = cv.VideoWriter_fourcc(*'XVID')
     else:
-        h, w, _ = frames[0].shape
+        fourcc = cv.VideoWriter_fourcc(*'mp4v')
 
-        fourcc = cv.VideoWriter_fourcc(*'MJPG')
-        video = cv.VideoWriter(video_file, fourcc, 30, (w, h), 1)
+    video = cv.VideoWriter(video_file, fourcc, 30, (w, h), True)
 
-        for frame in frames:
-            video.write(cv.cvtColor(frame, cv.COLOR_BGR2RGB))
+    for frame in frames:
+        # ensure 3-channel BGR for writer
+        if frame.ndim == 2:
+            frame = cv.cvtColor(frame, cv.COLOR_GRAY2BGR)
+        video.write(frame)
 
-        video.release()
+    video.release()
 
 
 def read_video(video_path):
@@ -140,38 +155,32 @@ def read_output(result_dir):
     membrane_curvs = np.loadtxt(os.path.join(result_dir, "membrane_curvs.csv"), delimiter=';')
     return data, membrane_intensities, membrane_xs, membrane_curvs
 
-def clear_directory(dir_path):
-    """Clear all the content of a directory."""
-    for root, _, files in os.walk(dir_path):
-        for file in files:
-            os.remove(os.path.join(root, file))
-
 
 def get_contour_ring(contour):
-        """
-        we use shapely to compute intersections so we transform the contour as an array to
-        a shapely linear ring
-        :param contour: contour points
-        :return: shapely linear ring corresponding to the contour
-        """
-        contour_ring = LinearRing(contour)
+    """
+    we use shapely to compute intersections so we transform the contour as an array to
+    a shapely linear ring
+    :param contour: contour points
+    :return: shapely linear ring corresponding to the contour
+    """
+    contour_ring = LinearRing(contour)
 
-        # correct the contour if not valid (aka self-intersections exist)
-        while not contour_ring.is_valid:
-            # find the point of self-intersection
-            p = re.compile("\[(.*?)\]")
-            wrong_point = p.findall(explain_validity(contour_ring))
-            if len(wrong_point) > 0:
-                # extract the point as an array if founded
-                wrong_point = wrong_point[0]
-                wrong_point = np.array(list(map(int, wrong_point.split(' '))))
-                wrong_index = np.where((contour == wrong_point).all(1))[0]
-                if len(wrong_index) > 0:
-                    # remove the point(s) (if multiple) from the contour
-                    contour = np.delete(contour, wrong_index, axis=0)
-                    contour_ring = LinearRing(contour)
+    # correct the contour if not valid (aka self-intersections exist)
+    while not contour_ring.is_valid:
+        # find the point of self-intersection
+        p = re.compile("\[(.*?)\]")
+        wrong_point = p.findall(explain_validity(contour_ring))
+        if len(wrong_point) > 0:
+            # extract the point as an array if founded
+            wrong_point = wrong_point[0]
+            wrong_point = np.array(list(map(int, wrong_point.split(' '))))
+            wrong_index = np.where((contour == wrong_point).all(1))[0]
+            if len(wrong_index) > 0:
+                # remove the point(s) (if multiple) from the contour
+                contour = np.delete(contour, wrong_index, axis=0)
+                contour_ring = LinearRing(contour)
 
-        return contour_ring
+    return contour_ring
 
 
 def keep_best_inter(intersect):
@@ -185,9 +194,9 @@ def keep_best_inter(intersect):
 
     :param intersect: result of the shapely intersection method
     """
-    np_intersect = np.round(
-        np.array(intersect.array_interface()["data"])
-    ).reshape(-1, 2).astype(np.int32)
+    np_intersect = np.array([geom.coords[0] if hasattr(geom, 'coords')
+                             else geom.xy for geom in intersect.geoms])
+    np_intersect = np.reshape(np.round(np_intersect), (-1, 2)).astype(np.int32)
     inter_1, inter_2 = None, None
     for pt in np_intersect:
         if inter_1 is None:
@@ -220,20 +229,3 @@ def compute_weights_df(contour, prev_tip):
     weights_to_tip = weights_to_tip[~weights_to_tip.index.duplicated(keep="first")]
 
     return weights_to_tip
-
-
-def get_temp_dir(temp_dir):
-    subdirs = [x[0] for x in os.walk(temp_dir)][1:]
-
-    if len(subdirs) == 0:
-        return None
-
-    first_ts = datetime.datetime.strptime(os.path.split(subdirs[0])[-1], "%Y-%m-%d_%H-%M-%S")
-    directory = subdirs[0]
-    for subdir in subdirs:
-        timestamp_str = os.path.split(subdir)[-1]
-        timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M-%S")
-        if timestamp > first_ts:
-            directory = subdir
-            first_ts = timestamp
-    return directory
