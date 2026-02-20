@@ -25,7 +25,9 @@ Before installing the software, you must ensure the following tools are installe
 * **Critical Installation Step:** You **MUST** check the box **"Add python.exe to PATH"** at the bottom of the installer window.
 * *Note:* Do not use Python 3.12 or 3.13 as they may cause dependency conflicts.
 
-<h4> 2. FFmpeg (Video Processing) </h4>
+<h4> 2. FFmpeg and OpenH264 (Video Processing)</h4>
+
+<h5> a. FFmpeg</h5>
 
 Windows does not have FFmpeg installed by default.
 
@@ -37,6 +39,19 @@ Windows does not have FFmpeg installed by default.
     * Under **System variables**, edit **Path**.
     * Add a new entry: `C:\ffmpeg\bin`.
     * **Restart your terminal/PowerShell** for changes to take effect.
+
+<h5> b. OpenH264</h5>
+
+You also need to install this codec for the application to work properly with the processing of the video on Windows.
+
+1. Go to the Cisco OpenH264 1.8.0 [release page](https://github.com/cisco/openh264/releases/tag/v1.8.0).
+2. Download the **.bz2** file related to your Windows bit version. Depending on your version it can be one of the two: `openh264-1.8.0-win32.dll.bz2` or `openh264-1.8.0-win64.dll.bz2`, usually the latter. More here about [How to tell if my Windows device is running a 32-bit or 64-bit version of Windows?](https://support.microsoft.com/en-us/windows/32-bit-and-64-bit-windows-frequently-asked-questions-c6ca9541-8dce-4d48-0415-94a3faa2e13d)
+3. Extract the downloaded archive; you should obtain a file with the `.dll` extension.
+4. Now you have two options:
+
+    * **Option 1:** Copy the extracted file and paste it into your `C:\Windows\System32` folder (you will need administrator privileges). If you can't have the admin rights, check option 2.
+
+    * **Option 2:** Keep it safe and once you'll have downloaded the TipQUANT repository (see the step [Install and Run](#install-and-run) below), copy and paste the extracted file directly into the root of the directory (besides the `run_app.py` file)
 
 <h4> 3. Poetry (Dependency Manager) </h4>
 
