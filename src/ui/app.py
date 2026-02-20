@@ -174,7 +174,6 @@ def main():
             plot_growth_area(data_primary, window_size, True, aggregation_frames),
             width="stretch"
         )
-        direction_angle_primary = plot_direction_angle(data_primary, window_size, final=False)
 
         colorscale = st.selectbox("Color",
                                   ("Viridis", "Inferno", "Plasma", "Jet",
@@ -185,8 +184,7 @@ def main():
                                         options=("None",
                                                  "Membrane mean intensity",
                                                  "Cytoplasm mean intensity",
-                                                 "Growth area",
-                                                 "Direction angle"),
+                                                 "Growth area"),
                                         )
 
         membrane_intensity_primary = plot_membrane_intensity(
@@ -196,8 +194,7 @@ def main():
         labels_to_plot = {
             "Membrane mean intensity": membrane_intensity_primary,
             "Cytoplasm mean intensity": cytoplasm_intensity_primary,
-            "Growth area": growth_area_primary,
-            "Direction angle": direction_angle_primary
+            "Growth area": growth_area_primary
         }
         other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
         heatmap_primary = plot_membrane_heatmap(
@@ -211,8 +208,7 @@ def main():
             labels_to_plot = {
                 "Membrane mean intensity": membrane_intensity_secondary,
                 "Cytoplasm mean intensity": cytoplasm_intensity_secondary,
-                "Growth area": growth_area_primary,
-                "Direction angle": direction_angle_primary
+                "Growth area": growth_area_primary
             }
             other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
             heatmap_secondary = plot_membrane_heatmap(
