@@ -172,7 +172,8 @@ class RegionB(Region):
         mmp = membrane_contour[len(membrane_contour) // 2]
 
         vector = imp - mmp
-        vector /= np.linalg.norm(vector)
+        if np.linalg.norm(vector) != 0:
+            vector /= np.linalg.norm(vector)
         vector = (np.round(vector*self.depth) + mmp).astype(np.int32)
 
         # construct a line going from the two end of the roi membrane
