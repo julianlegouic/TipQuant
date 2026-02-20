@@ -9,10 +9,8 @@ import streamlit as st
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
                          plot_membrane_intensity, plot_direction_angle)
-                         plot_membrane_intensity, plot_direction_angle)
 from src.ui.progressionbar import ProgressionBar
 from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sidebar,
-                            region_sidebar, advanced_sidebar)
                             region_sidebar, advanced_sidebar)
 from src.ui.utils import write_config, local_css
 from src.utils import clear_directory, makedirs, save_frames, get_frames, save_output, read_video, read_output
