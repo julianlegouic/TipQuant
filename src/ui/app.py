@@ -2,13 +2,11 @@ import datetime
 import os
 import platform
 import toml
-import platform
-import toml
 import streamlit as st
 
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
-                         plot_membrane_intensity, plot_direction_angle)
+                         plot_membrane_intensity)
 from src.ui.progressionbar import ProgressionBar
 from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sidebar,
                             region_sidebar, advanced_sidebar)
