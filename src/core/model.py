@@ -18,6 +18,8 @@ class PollenTube:
         self.direction = None
         # membrane
         self.membrane_indices = None
+        # frame flags
+        self.valid_detection = []
 
     @property
     def tip(self):

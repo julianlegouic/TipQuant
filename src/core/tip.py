@@ -38,6 +38,27 @@ class TipDetection:
         return [index % max_index for index in
                 range(window_center_index - half_window, window_center_index + half_window + 1)]
 
+    def init_tip(self, contour):
+        """
+        finds the tip as the point with the opposite index in the contour from the middle of the tube base.
+        The tube base is defined as the set of points with the most frequent coordinate in the contour, whether x or y.
+        :param contour: contour of the current frame
+        :return: index of the tip wrt the contour
+        """
+        # Flatten the contour to pool all x and y values together and find the mode
+        values, counts = np.unique(contour, return_counts=True)
+        most_frequent_coordinate = values[np.argmax(counts)]
+
+        # Determine if the most frequent coordinate is more prevalent in x or y
+        x_count = np.count_nonzero(contour[..., 0] == most_frequent_coordinate)
+        y_count = np.count_nonzero(contour[..., 1] == most_frequent_coordinate)
+        axis = 0 if x_count >= y_count else 1
+        mfc_mask = np.where(contour[..., axis] == most_frequent_coordinate)
+        tube_base_mid_idx = mfc_mask[0][mfc_mask[0].shape[0] // 2]
+        init_tip_index = (tube_base_mid_idx + contour.shape[0]//2) % contour.shape[0]
+
+        return init_tip_index
+
     def get_tips_from_displacements(self, displacements, roi_indices):
         """
         finds the tip by selecting the point with maximal displacement (local growth) over a window.

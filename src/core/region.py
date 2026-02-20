@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-from shapely.geometry import LineString, LinearRing
+from shapely.geometry import LineString
 from src.core.utils import get_mask, sample_cnt
 from src.utils import get_contour_ring, keep_best_inter
 
@@ -63,7 +63,7 @@ class Membrane(Region):
 
         return membrane_indices, xs
 
-    def get_mask(self, tube_contour, membrane_contour, shape):
+    def get_membrane_mask(self, tube_contour, membrane_contour, shape):
         """
         builds a mask of the membrane by expanding a line around the membrane contour and
         restricting it to the intersection of the pollen tube contour
@@ -92,7 +92,7 @@ class RegionA(Region):
         depth = round(config["REGION"]['A']["DEPTH"] / config["PIXEL_SIZE"])
         return cls(depth=depth)
 
-    def get_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
+    def get_region_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
         """
         computes the region A mask
         :param membrane_mask: binary mask of the membrane
@@ -156,7 +156,7 @@ class RegionC(Region):
         depth = round(config["REGION"]['C']["DEPTH"] / config["PIXEL_SIZE"])
         return cls(depth=depth)
 
-    def get_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
+    def get_region_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
         """
         from membrane specs, builds the type C region mask
         :param membrane_mask: binary mask of the membrane (for compatibility)
@@ -202,6 +202,8 @@ class RegionC(Region):
                 sub_cont = np.concatenate([contour[end:], contour[:start]])
 
             mask = get_mask(sub_cont, shape, mask_type="fill")
+        else:
+            mask = np.zeros(shape, dtype=np.uint8)
 
         return mask
 
@@ -220,7 +222,7 @@ class RegionD(Region):
         radius = round(config["REGION"]['D']["RADIUS"] / config["PIXEL_SIZE"])
         return cls(depth=depth, radius=radius)
 
-    def get_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
+    def get_region_mask(self, membrane_mask, membrane_contour, membrane_thickness, contour, shape):
         """
         computes the region D mask
         :param membrane_mask: binary mask of the membrane (for compatibility)

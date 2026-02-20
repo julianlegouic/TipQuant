@@ -65,9 +65,12 @@ class Measure:
         """
         roi = np.where(mask == 255)
         intensities = frame[roi]
-        return np.mean(intensities)
+        if intensities.size == 0:
+            return 0
+        else:
+            return np.mean(intensities)
 
-    def area_growth(self, contour, prev_contour, prev_membrane_contour, shape):
+    def area_growth(self, contour, prev_contour, prev_membrane_contour, shape, valid_detection):
         """
         compute the difference of areas given two contours
         the difference is expressed in physical units (um2 / s)
@@ -75,9 +78,10 @@ class Measure:
         :param prev_contour: contour at timestep t - 1
         :param prev_membrane_contour: membrane contour at timestep t - 1
         :param shape: shape used to compute mask
+        :param valid_detection: boolean indicating if the detection is valid
         :return: area growth at time t
         """
-        if (prev_contour is None) and (prev_membrane_contour is None):
+        if not valid_detection or ((prev_contour is None) and (prev_membrane_contour is None)):
             return 0
         # get membrane extreme points
         m_ext_1 = prev_membrane_contour[0]
@@ -111,11 +115,12 @@ class Measure:
 
         return area
 
-    def growth_angle(self, direction, reference):
+    def growth_angle(self, direction, reference, valid_detection):
         """
         computes the angle in degrees between the vector `direction` and `reference`
         :param direction: direction vector
         :param reference: reference vector
+        :param valid_detection: boolean indicating if the detection is valid
         :return: angle between direction and reference in degrees
         """
         if np.linalg.norm(direction) == 0.0:
@@ -136,7 +141,7 @@ class Measure:
             np.linalg.det([v0, v1]),
             np.dot(v0, v1)
         )
-        return np.degrees(rad_angle)
+        return np.degrees(rad_angle) if valid_detection else 0.0
 
     @staticmethod
     def membrane_intensity_distribution(frame, contour, normals, membrane_indices,

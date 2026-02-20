@@ -326,8 +326,7 @@ class ContourCharacterization:
         :param array: array of vectors
         :return: normalized array
         """
-        f = lambda vector: vector / np.linalg.norm(vector)
-        normed = np.apply_along_axis(f, axis=1, arr=array)
+        normed = np.apply_along_axis(lambda vector: vector / np.linalg.norm(vector), axis=1, arr=array)
         return normed
 
     @staticmethod
@@ -380,8 +379,7 @@ class ContourCharacterization:
         :param us: delta between tangent points
         :return: curvatures
         """
-        gradient = lambda x: np.gradient(x, us)
-        dT = np.apply_along_axis(gradient, axis=0, arr=T)
+        dT = np.apply_along_axis(lambda x: np.gradient(x, us), axis=0, arr=T)
         K = np.apply_along_axis(np.linalg.norm, axis=1, arr=dT)
         return K
 
@@ -415,9 +413,12 @@ class ContourROI:
         :param contours: list of contours
         :return: max area contour
         """
-        contours = sorted(contours, key=lambda x: cv.contourArea(x))
-        contour = contours[-1]
-        contour = contour[:, 0, :]
+        if len(contours) > 0:
+            contours = sorted(contours, key=lambda x: cv.contourArea(x))
+            contour = contours[-1]
+            contour = contour[:, 0, :]
+        else:
+            contour = np.array([])
         return contour
 
     def _get_diff_contour(self, current_contour, next_contour, shape):
@@ -438,6 +439,8 @@ class ContourROI:
         growth_contours, _ = cv.findContours(dilated_1, mode=cv.RETR_TREE,
                                              method=cv.CHAIN_APPROX_NONE)
         growth_contour = self._select_contour(growth_contours)
+        if growth_contour.size == 0:
+            return np.array([])
         growth_mask = get_mask(growth_contour, shape, "fill")
         growth_mask = cv.dilate(growth_mask, kernel=np.ones((3, 3), np.uint8), iterations=2)
         contour = cv.bitwise_and(get_mask(current_contour, shape, "lines", isClosed=False),
