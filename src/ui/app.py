@@ -35,7 +35,6 @@ config = DEFAULT_CONFIG.copy()
 
 def main():
     st.set_page_config(page_title="TipQUANT", layout="wide")
-    st.set_page_config(page_title="TipQUANT", layout="wide")
     st.title("TipQUANT")
     local_css("./src/css/style.css")
 
@@ -54,7 +53,6 @@ def main():
 
     load_video = st.button("Load video(s)", use_container_width=True)
     video_slot = st.empty()
-    run = st.button("Run", use_container_width=True)
     run = st.button("Run", use_container_width=True)
 
     # Sidebar
@@ -141,7 +139,6 @@ def main():
         progress_bar.success("Measures are completed")
 
     primary_filelist = [f for f in os.listdir(TMP_PRIMARY_DIR)]
-    secondary_filelist = []
     secondary_filelist = [f for f in os.listdir(TMP_SECONDARY_DIR)]
 
     if len(primary_filelist) > 2:
