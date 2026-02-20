@@ -2,17 +2,25 @@ import datetime
 import os
 import platform
 import toml
+import platform
+import toml
 import streamlit as st
 
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
                          plot_membrane_intensity, plot_direction_angle)
+                         plot_membrane_intensity, plot_direction_angle)
 from src.ui.progressionbar import ProgressionBar
 from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sidebar,
+                            region_sidebar, advanced_sidebar)
                             region_sidebar, advanced_sidebar)
 from src.ui.utils import write_config, local_css
 from src.utils import clear_directory, makedirs, save_frames, get_frames, save_output, read_video, read_output
 
+TMP_CODEC = "mp4v" if platform.system() == "Windows" else "H264"
+RESULT_CODEC = "H264"
+# tipQuant directory
+MAIN_DIRECTORY = '/'.join(os.path.realpath(__file__).split('/')[:-3])
 TMP_CODEC = "mp4v" if platform.system() == "Windows" else "H264"
 RESULT_CODEC = "H264"
 # tipQuant directory
@@ -30,6 +38,7 @@ config = DEFAULT_CONFIG.copy()
 
 
 def main():
+    st.set_page_config(page_title="TipQUANT", layout="wide")
     st.set_page_config(page_title="TipQUANT", layout="wide")
     st.title("TipQUANT")
     local_css("./src/css/style.css")
@@ -49,6 +58,7 @@ def main():
 
     load_video = st.button("Load video(s)", use_container_width=True)
     video_slot = st.empty()
+    run = st.button("Run", use_container_width=True)
     run = st.button("Run", use_container_width=True)
 
     # Sidebar
@@ -104,6 +114,7 @@ def main():
                 data_secondary, membrane_intensities_secondary, membrane_xs_secondary, _, _, _, _ = measure_data_secondary
                 save_frames(output_frames_secondary, TMP_SECONDARY_OUTPUT_PATH, force_codec=RESULT_CODEC)
 
+        with st.spinner("Saving results..."):
         with st.spinner("Saving results..."):
             # save into target directory
             if uploaded_file_primary is None:
