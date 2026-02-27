@@ -137,8 +137,8 @@ poetry install --without dev
 
 2. **Using the Interface:**
     The browser will open automatically at `http://localhost:8501`.
-    * **Primary Video / Reference Channel:** Upload the primary video used for contour/growth detection.
-    * **Secondary Video / Signal Channel:** Upload the fluorescence video for intensity measurement.
+    * **Primary Video / Reference Channel:** Used to analyze a single video, or as the reference for contour detection when analyzing two-channel recordings of the same cell.
+    * **Secondary Video / Signal Channel:** Upload the second channel's video from the same cell for two-channel analysis. Measurements are based on contours detected in the primary video.
 
 If you find any issue during the setup, please take a loot at our troubleshooting [section](#troubleshooting).
 
