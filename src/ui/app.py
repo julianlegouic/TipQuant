@@ -167,10 +167,19 @@ def main():
                                 value=1,
                                 step=1)
 
-        growth_area_primary = plot_growth_area(data_primary, window_size, False, aggregation_frames)
+        growth_area_primary, df_growth_area_primary = plot_growth_area(data_primary, window_size, False, aggregation_frames, True)
         st.plotly_chart(
             plot_growth_area(data_primary, window_size, True, aggregation_frames),
             width="stretch"
+        )
+
+        csv_buf = io.StringIO()
+        df_growth_area_primary.to_csv(csv_buf, index=True)
+        st.download_button(
+            label="⬇️ Download to CSV (only growth area graph data)",
+            data=csv_buf.getvalue(),
+            file_name=f"{uploaded_file_primary.name}_growth_area_aggregated.csv",
+            mime="text/csv"
         )
 
         colorscale = st.selectbox("Color",

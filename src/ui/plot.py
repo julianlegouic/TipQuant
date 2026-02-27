@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
-def plot_growth_area(data, window_size, final, aggregation_frames=1):
+def plot_growth_area(data, window_size, final, aggregation_frames=1, return_dataframe=False):
     """
     line plot of area growth wrt time
     :param aggregation_frames: aggregated area growth every X frames
@@ -34,7 +34,10 @@ def plot_growth_area(data, window_size, final, aggregation_frames=1):
         fig.update_layout(yaxis_title=y_axis_label)
         fig.update_layout(title="Area growth over time")
         return fig
-    return scatter
+    if return_dataframe:
+        return scatter, data_aggregated
+    else:
+        return scatter
 
 
 def plot_cytoplasm_intensity(data, window_size, final):
