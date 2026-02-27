@@ -150,6 +150,9 @@ def main():
             data_secondary, membrane_intensities_secondary, membrane_xs_secondary, _ = read_output(TMP_SECONDARY_DIR)
 
         # make plots
+        if not data_primary[["valid_detection", "valid_region"]].all().all():
+            st.warning("⚠️ Displayed data may contain invalid detections or regions.")
+
         st.header("Measures")
 
         window_size = st.slider("Bandwidth for smoothing curves with a moving average",
