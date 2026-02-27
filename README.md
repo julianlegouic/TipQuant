@@ -137,7 +137,7 @@ poetry install --without dev
 
 2. **Using the Interface:**
     The browser will open automatically at `http://localhost:8501`.
-    * **Primary Video / Reference Channel:** Upload the brightfield video used for contour/growth detection.
+    * **Primary Video / Reference Channel:** Upload the primary video used for contour/growth detection.
     * **Secondary Video / Signal Channel:** Upload the fluorescence video for intensity measurement.
 
 If you find any issue during the setup, please take a loot at our troubleshooting [section](#troubleshooting).
