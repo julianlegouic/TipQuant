@@ -213,13 +213,14 @@ def get_data(frames, tubes, config, region_name, progress_bar=None, video_type="
         )
         data.loc[i, "area_growth"] = area_growth
 
+        # DEPRECATED
         # Growth direction angle
-        growth_angle = measure.growth_angle(
-            direction=tube.direction,
-            reference=tubes[0].direction,
-            valid_detection=tube.valid_detection
-        )
-        data.loc[i, "growth_direction_angle"] = growth_angle
+        # growth_angle = measure.growth_angle(
+        #     direction=tube.direction,
+        #     reference=tubes[0].direction,
+        #     valid_detection=tube.valid_detection
+        # )
+        # data.loc[i, "growth_direction_angle"] = growth_angle
 
         # Cytoplasm intensity
         cyto_intensity = measure.region_mean_intensity(

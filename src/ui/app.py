@@ -1,14 +1,13 @@
 import datetime
+import io
 import os
-import platform
-import toml
 import platform
 import toml
 import streamlit as st
 
 from src.core.run import get_tubes, get_data
 from src.ui.plot import (plot_cytoplasm_intensity, plot_growth_area, plot_membrane_heatmap,
-                         plot_membrane_intensity, plot_direction_angle)
+                         plot_membrane_intensity)
 from src.ui.progressionbar import ProgressionBar
 from src.ui.sidebar import (video_params_sidebar, model_sidebar, membrane_sidebar,
                             region_sidebar, advanced_sidebar)
@@ -37,7 +36,6 @@ config = DEFAULT_CONFIG.copy()
 
 def main():
     st.set_page_config(page_title="TipQUANT", layout="wide")
-    st.set_page_config(page_title="TipQUANT", layout="wide")
     st.title("TipQUANT")
     local_css("./src/css/style.css")
 
@@ -56,7 +54,6 @@ def main():
 
     load_video = st.button("Load video(s)", use_container_width=True)
     video_slot = st.empty()
-    run = st.button("Run", use_container_width=True)
     run = st.button("Run", use_container_width=True)
 
     # Sidebar
@@ -143,7 +140,6 @@ def main():
         progress_bar.success("Measures are completed")
 
     primary_filelist = [f for f in os.listdir(TMP_PRIMARY_DIR)]
-    secondary_filelist = []
     secondary_filelist = [f for f in os.listdir(TMP_SECONDARY_DIR)]
 
     if len(primary_filelist) > 2:
@@ -155,6 +151,9 @@ def main():
             data_secondary, membrane_intensities_secondary, membrane_xs_secondary, _ = read_output(TMP_SECONDARY_DIR)
 
         # make plots
+        if not data_primary[["valid_detection", "valid_region"]].all().all():
+            st.warning("⚠️ Displayed data may contain invalid detections or regions.")
+
         st.header("Measures")
 
         window_size = st.slider("Bandwidth for smoothing curves with a moving average",
@@ -169,12 +168,20 @@ def main():
                                 value=1,
                                 step=1)
 
-        growth_area_primary = plot_growth_area(data_primary, window_size, False, aggregation_frames)
+        growth_area_primary, df_growth_area_primary = plot_growth_area(data_primary, window_size, False, aggregation_frames, True)
         st.plotly_chart(
             plot_growth_area(data_primary, window_size, True, aggregation_frames),
             width="stretch"
         )
-        direction_angle_primary = plot_direction_angle(data_primary, window_size, final=False)
+
+        csv_buf = io.StringIO()
+        df_growth_area_primary.to_csv(csv_buf, index=True)
+        st.download_button(
+            label="⬇️ Download to CSV (only growth area graph data)",
+            data=csv_buf.getvalue(),
+            file_name=f"{uploaded_file_primary.name}_growth_area_aggregated.csv",
+            mime="text/csv"
+        )
 
         colorscale = st.selectbox("Color",
                                   ("Viridis", "Inferno", "Plasma", "Jet",
@@ -185,8 +192,7 @@ def main():
                                         options=("None",
                                                  "Membrane mean intensity",
                                                  "Cytoplasm mean intensity",
-                                                 "Growth area",
-                                                 "Direction angle"),
+                                                 "Growth area"),
                                         )
 
         membrane_intensity_primary = plot_membrane_intensity(
@@ -196,8 +202,7 @@ def main():
         labels_to_plot = {
             "Membrane mean intensity": membrane_intensity_primary,
             "Cytoplasm mean intensity": cytoplasm_intensity_primary,
-            "Growth area": growth_area_primary,
-            "Direction angle": direction_angle_primary
+            "Growth area": growth_area_primary
         }
         other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
         heatmap_primary = plot_membrane_heatmap(
@@ -211,8 +216,7 @@ def main():
             labels_to_plot = {
                 "Membrane mean intensity": membrane_intensity_secondary,
                 "Cytoplasm mean intensity": cytoplasm_intensity_secondary,
-                "Growth area": growth_area_primary,
-                "Direction angle": direction_angle_primary
+                "Growth area": growth_area_primary
             }
             other_fig = labels_to_plot[other_figs_label] if other_figs_label != "None" else None
             heatmap_secondary = plot_membrane_heatmap(
