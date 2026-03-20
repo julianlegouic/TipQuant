@@ -10,7 +10,9 @@ from src.core.measure import Measure
 from src.core.model import PollenTube
 from src.core.region import Membrane, RegionA, RegionB, RegionC
 from src.core.tip import TipDetection, TipCorrection
-from src.core.utils import cast_to_gray, make_frame, normalize_frames
+from src.core.utils import cast_to_gray, make_frame, normalize_frames, get_mask
+
+import tifffile
 
 
 def get_contour_preview(frames, config):
@@ -70,11 +72,13 @@ def get_tubes(frames, config, progress_bar=None):
     tubes = list()
     prev_contour = None
     cnt_detect.get_threshold(gray_frames)
+    # masks_to_print = list()
 
     for frame in tqdm(gray_frames, desc="Detecting Contour", total=len(gray_frames)):
         tube = PollenTube()
         # detect contour
         contour = cnt_detect.detect_contour(frame=frame, prev_contour=prev_contour)
+        # masks_to_print.append(get_mask(contour, shape, "fill"))
         # parameterize
         tube.contour, tube.tck, tube.us = cnt_param.parameterize_contour(contour, shape)
         prev_contour = tube.contour
@@ -84,6 +88,9 @@ def get_tubes(frames, config, progress_bar=None):
 
         if progress_bar is not None:
             progress_bar.update()
+
+    # Save masks for manual checking of contour detection (uncomment if needed)
+    # tifffile.imwrite("tmp/masks_preview.tiff", np.array(masks_to_print, dtype=np.uint8))
 
     if progress_bar is not None:
         progress_bar("Detecting TIP on primary video...", len(tubes) - step)
