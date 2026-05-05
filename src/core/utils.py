@@ -94,7 +94,7 @@ def make_frame(frame, contour, membrane_mask, region_mask, tip):
     region_mask[np.where((region_mask == [255, 255, 255]).all(axis=2))] = (0, 125, 0)
     frame = cv.addWeighted(frame, 1, region_mask, 0.5, 0)
     # draw tip
-    cv.circle(frame, (tip[0], tip[1]), 3, (255, 0, 0), 2)
+    cv.circle(frame, (tip[0], tip[1]), 3, (0, 0, 255), 2)
     # draw contour
     cv.drawContours(frame, [contour], -1, (255, 255, 255))
     return frame
