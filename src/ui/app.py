@@ -35,8 +35,8 @@ config = DEFAULT_CONFIG.copy()
 
 
 def main():
-    st.set_page_config(page_title="TipQUANT", layout="wide")
-    st.title("TipQUANT")
+    st.set_page_config(page_title="TipQuant", layout="wide")
+    st.title("TipQuant")
     local_css("./src/css/style.css")
 
     # Videos

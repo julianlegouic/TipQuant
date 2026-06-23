@@ -1,4 +1,4 @@
-# TipQUANT
+# TipQuant
 
 Automated tool for retrieving data, such as tip location and membrane intensity distribution, from pollen growth videos, and quantifying pollen tube growth and fluorescence intensity using contour detection.
 
@@ -51,7 +51,7 @@ You also need to install this codec for the application to work properly with th
 
     * **Option 1:** Copy the extracted file and paste it into your `C:\Windows\System32` folder (you will need administrator privileges). If you can't have the admin rights, check option 2.
 
-    * **Option 2:** Keep it safe and once you'll have downloaded the TipQUANT repository (see the step [Install and Run](#install-and-run) below), copy and paste the extracted file directly into the root of the directory (besides the `run_app.py` file)
+    * **Option 2:** Keep it safe and once you'll have downloaded the TipQuant repository (see the step [Install and Run](#install-and-run) below), copy and paste the extracted file directly into the root of the directory (besides the `run_app.py` file)
 
 <h4> 3. Poetry (Dependency Manager) </h4>
 
@@ -103,7 +103,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 Getting the code from the repository and clone or download it inside on your local machine. You will need to install Git separately if you want to clone it.
 
 ```sh
-git clone [https://github.com/YourRepo/TipQUANT.git](https://github.com/YourRepo/TipQUANT.git)
+git clone [https://github.com/YourRepo/TipQuant.git](https://github.com/YourRepo/TipQuant.git)
 cd TipQuant
 ```
 
@@ -129,7 +129,7 @@ poetry install --without dev
 **Note for Poetry 2.0+ Users:** The `poetry shell` command is deprecated. Please use the command below to launch the application directly.
 
 1. **Start the Application:**
-    Run this command inside the `TipQUANT` directory:
+    Run this command inside the `TipQuant` directory:
 
     ```powershell
     poetry run python run_app.py
